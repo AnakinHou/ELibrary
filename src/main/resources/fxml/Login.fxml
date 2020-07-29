@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.paint.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.image.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+
+<HBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="457.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <ImageView id="img_login" fitHeight="444.0" fitWidth="366.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="/images/login.png" />
+         </image>
+         <HBox.margin>
+            <Insets top="20.0" />
+         </HBox.margin></ImageView>
+      <Group>
+         <children>
+            <VBox prefHeight="300.0" prefWidth="400.0">
+               <children>
+                  <Label id="lbl_msg" alignment="CENTER" contentDisplay="CENTER" prefHeight="30.0" prefWidth="400.0" textAlignment="CENTER" textFill="RED">
+                     <font>
+                        <Font size="24.0" />
+                     </font>
+                  </Label>
+                  <Label id="lbl_username" text="用户名">
+                     <font>
+                        <Font name="System Bold" size="24.0" />
+                     </font></Label>
+                  <TextField id="txt_username" prefHeight="50.0" prefWidth="300.0" promptText="请输入用户名" text="admin">
+                     <font>
+                        <Font size="24.0" />
+                     </font></TextField>
+                  <Label id="lbl_password" text="密码">
+                     <VBox.margin>
+                        <Insets top="20.0" />
+                     </VBox.margin>
+                     <font>
+                        <Font name="System Bold" size="24.0" />
+                     </font></Label>
+                  <PasswordField id="txt_password" prefHeight="50.0" prefWidth="300.0" promptText="请输入密码" text="admin">
+                     <font>
+                        <Font size="24.0" />
+                     </font></PasswordField>
+                  <Button id="btn_login" defaultButton="true" disable="true" mnemonicParsing="false" prefHeight="50.0" prefWidth="400.0" text="登录">
+                     <VBox.margin>
+                        <Insets top="20.0" />
+                     </VBox.margin>
+                     <font>
+                        <Font size="24.0" />
+                     </font></Button>
+               </children>
+            </VBox>
+         </children>
+         <HBox.margin>
+            <Insets bottom="50.0" left="10.0" right="5.0" top="90.0" />
+         </HBox.margin>
+      </Group>
+   </children>
+   <padding>
+      <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+   </padding>
+</HBox>

@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <ToolBar prefHeight="40.0" prefWidth="200.0">
+        <items>
+            <TextField id="txt_browse" prefHeight="30.0" prefWidth="599.0" promptText="请选择文件夹或文件">
+               <font>
+                  <Font name="System Bold" size="14.0" />
+               </font></TextField>
+          <Button id="btn_dir_browse" mnemonicParsing="false" prefHeight="30.0" text="浏览文件夹">
+               <font>
+                  <Font name="System Bold" size="14.0" />
+               </font></Button>
+            <Button id="btn_file_browse" mnemonicParsing="false" prefHeight="30.0" text="浏览文件">
+               <font>
+                  <Font name="System Bold" size="14.0" />
+               </font>
+            </Button>
+            <Button id="btn_open_file" defaultButton="true" mnemonicParsing="false" prefHeight="30.0" text="打开文件">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Button>
+            <Button id="btn_delete_file" cancelButton="true" mnemonicParsing="false" prefHeight="30.0" text="删除">
+               <font>
+                  <Font name="System Bold" size="14.0" />
+               </font>
+            </Button>
+        </items>
+      </ToolBar>
+      <TreeTableView id="ttv_file_import_record" fx:id="treeTableFIleImportRecord" editable="true" VBox.vgrow="ALWAYS">
+        <columns>
+          <TreeTableColumn id="tc_filename" prefWidth="240" text="名称" />
+          <TreeTableColumn id="tc_subtitle" minWidth="100.0" prefWidth="240" text="文件标题" />
+            <TreeTableColumn id="tc_hd_id" prefWidth="75.0" text="HDID" />
+            <TreeTableColumn id="tc_hd_serialnumber" prefWidth="220.0" text="硬盘序列号" />
+            <TreeTableColumn id="tc_pt_id" prefWidth="75.0" text="PT_ID" />
+            <TreeTableColumn id="tc_pt_uuid" minWidth="90.0" prefWidth="220.0" text="分区序列号" />
+            <TreeTableColumn id="tc_mount_point" prefWidth="80.0" text="挂载点" />
+            <TreeTableColumn id="tc_file_path" prefWidth="180.0" text="文件路径" />
+            <TreeTableColumn id="tc_file_size" prefWidth="100.0" text="文件大小" />
+            <TreeTableColumn id="tc_last_modified_time" prefWidth="126.0" text="最后修改时间" />
+            <TreeTableColumn id="tc_file_main_type" prefWidth="80.0" text="类型大分类" />
+            <TreeTableColumn id="tc_file_mark" prefWidth="80.0" text="文件标记" />
+            <TreeTableColumn id="tc_file_tip" prefWidth="214.0" text="文件备注" />
+            <TreeTableColumn id="tc_file_suffix" prefWidth="60.0" text="后缀名" />
+            <TreeTableColumn id="tc_platform" prefWidth="60.0" text="系统平台" />
+        </columns>
+         <VBox.margin>
+            <Insets />
+         </VBox.margin>
+      </TreeTableView>
+      <FlowPane alignment="CENTER_RIGHT" maxHeight="40.0" VBox.vgrow="ALWAYS">
+         <children>
+            <Button id="btn_submit" alignment="CENTER" contentDisplay="CENTER" defaultButton="true" mnemonicParsing="false" prefHeight="30.0" prefWidth="110.0" text="提交">
+               <font>
+                  <Font name="System Bold" size="14.0" />
+               </font>
+               <FlowPane.margin>
+                  <Insets right="30.0" />
+               </FlowPane.margin>
+            </Button>
+         </children>
+      </FlowPane>
+   </children>
+</VBox>

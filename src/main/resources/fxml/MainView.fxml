@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1024.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.tools.fx.library.controller.MainWindowController">
+	<children>
+		<Pane prefHeight="69.0" prefWidth="600.0">
+			<children>
+				<Label alignment="CENTER" contentDisplay="CENTER" prefHeight="73.0" prefWidth="1000.0" text="E-Library" textAlignment="CENTER" BorderPane.alignment="CENTER">
+					<font>
+						<Font size="36.0" />
+					</font>
+				</Label>
+			</children>
+		</Pane>
+		<SplitPane dividerPositions="0.23578595317725753" prefHeight="537.0" prefWidth="1000.0" VBox.vgrow="ALWAYS">
+			<items>
+				<VBox maxWidth="400.0" prefHeight="200.0" prefWidth="240.0">
+					<children>
+						<ToolBar prefHeight="46.0" prefWidth="245.0">
+							<items>
+								<Button id="btn_refresh" fx:id="btnRefresh" mnemonicParsing="false" onAction="#onBtnRefreshClick" prefHeight="30.0" prefWidth="50.0" text="刷新">
+									<font>
+										<Font name="System Bold" size="14.0" />
+									</font>
+								</Button>
+								<Button id="btn_hd_manage" mnemonicParsing="false" prefHeight="30.0" prefWidth="76.0" text="硬盘管理">
+									<font>
+										<Font name="System Bold" size="14.0" />
+									</font>
+								</Button>
+								<Button id="btn_import" maxWidth="83.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="76.0" text="导入资料">
+									<font>
+										<Font name="System Bold" size="14.0" />
+									</font>
+								</Button>
+							</items>
+						</ToolBar>
+						<TreeView id="tree_volume" fx:id="treeVolume" prefHeight="506.0" prefWidth="235.0" VBox.vgrow="ALWAYS" />
+					</children>
+				</VBox>
+				<VBox prefHeight="200.0" prefWidth="100.0">
+					<children>
+						<ToolBar prefHeight="50.0" prefWidth="755.0">
+							<items>
+								<CheckBox id="ck_all_lib" fx:id="ckAllLib" mnemonicParsing="false" prefHeight="30.0" selected="true" text="全库">
+									<font>
+										<Font name="System Bold" size="14.0" />
+									</font>
+								</CheckBox>
+								<ComboBox id="cmb_main_type" fx:id="cmbMainType" prefHeight="30.0" prefWidth="100.0" />
+								<TextField id="txt_search" fx:id="txtSearch" prefHeight="30.0" prefWidth="300.0" />
+								<Button id="btn_search" fx:id="btnSearch" defaultButton="true" mnemonicParsing="false" onAction="#onBtnSearchClick" prefHeight="30.0" text="搜索">
+									<font>
+										<Font name="System Bold" size="14.0" />
+									</font>
+								</Button>
+								<Button id="btn_open_file" fx:id="btnOpenFile" mnemonicParsing="false" onAction="#onBtnOpenFileClick" prefHeight="30.0" text="打开文件">
+									<font>
+										<Font name="System Bold" size="14.0" />
+									</font>
+								</Button>
+								
+								<Button id="btn_save_file" fx:id="btnSaveFile" disable="true" mnemonicParsing="false" onAction="#onBtnSaveFileClick" prefHeight="30.0" text="保存">
+									<font>
+										<Font name="System Bold" size="14.0" />
+									</font>
+								</Button>
+                      <Button id="btn_delete_file" fx:id="btnDeleteFile" disable="true" mnemonicParsing="false" onAction="#onBtnDeleteFileClick" prefHeight="30.0" text="删除">
+									<font>
+										<Font name="System Bold" size="14.0" />
+									</font>
+								</Button>
+							</items>
+						</ToolBar>
+						<TableView id="tv_file_search_record" fx:id="fileSearchRecord" prefHeight="436.0" prefWidth="755.0" VBox.vgrow="ALWAYS">
+							<columns>
+							    <TableColumn fx:id="colNO" maxWidth="60.0" prefWidth="50.0" text="" />
+								<TableColumn fx:id="fileName" prefWidth="260.0" text="文件名称" />
+								<TableColumn fx:id="subtitle" prefWidth="260.0" text="文件别名" />
+								<TableColumn fx:id="mountPoint" editable="false" prefWidth="140.0" sortable="false" text="当前分区" />
+								<TableColumn fx:id="filePath" prefWidth="300.0" text="文件路径" />
+								<TableColumn fx:id="fileSize" prefWidth="120.0" text="文件大小" />
+
+								<TableColumn fx:id="fileMainType" prefWidth="120.0" text="文件分类" />
+								<TableColumn fx:id="fileMark" prefWidth="120.0" text="文件标记" />
+								<TableColumn fx:id="fileTip" prefWidth="160.0" text="文件描述" />
+								<TableColumn fx:id="fileSuffix" prefWidth="100.0" text="后缀名" />
+								<TableColumn fx:id="lastModified" prefWidth="146.0" text="最后修改日期" />
+<!-- 								<TableColumn fx:id="fileId" prefWidth="75.0" text="FileID" /> -->
+<!-- 								<TableColumn fx:id="hdID" prefWidth="91.0" text="hdID" /> -->
+<!-- 								<TableColumn fx:id="ptID" prefWidth="94.0" text="ptID" /> -->
+<!-- 								<TableColumn fx:id="hdName" prefWidth="204.0" text="硬盘名称" /> -->
+								<TableColumn fx:id="hdNickname" prefWidth="154.0" text="硬盘别名" />
+								<TableColumn fx:id="hdWinSerialNumber" prefWidth="119.0" text="Win序列号" />
+								<TableColumn fx:id="hdMacSerialNumber" prefWidth="159.0" text="mac序列号" />
+								<TableColumn fx:id="winUUID" prefWidth="240.0" text="winUUID" />
+								<TableColumn fx:id="macUUID" prefWidth="260.0" text="macUUID" />
+							</columns>
+						</TableView>
+						<Pagination id="pg_tv_file_search_record" fx:id="pageFileSearchRecord" maxHeight="50.0" pageCount="1" VBox.vgrow="ALWAYS" />
+					</children>
+				</VBox>
+			</items>
+		</SplitPane>
+	</children>
+</VBox>
