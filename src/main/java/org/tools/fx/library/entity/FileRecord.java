@@ -30,11 +30,8 @@ public class FileRecord {
     /**
      * 
      */
-    @Column(name = "HD_WINSERIALNUMBER")
-    private String hdWinSerialNumber;
-
-    @Column(name = "HD_MACSERIALNUMBER")
-    private String hdMacSerialNumber;
+    @Column(name = "HD_UNIQUE_CODE")
+    private String hdUniqueCode;
 
     @Column(name = "WIN_UUID")
     private String winUUID;
@@ -153,20 +150,13 @@ public class FileRecord {
         this.hdNickname = hdNickname;
     }
 
-    public String getHdWinSerialNumber() {
-        return hdWinSerialNumber;
+
+    public String getHdUniqueCode() {
+        return hdUniqueCode;
     }
 
-    public void setHdWinSerialNumber(String hdWinSerialNumber) {
-        this.hdWinSerialNumber = hdWinSerialNumber;
-    }
-
-    public String getHdMacSerialNumber() {
-        return hdMacSerialNumber;
-    }
-
-    public void setHdMacSerialNumber(String hdMacSerialNumber) {
-        this.hdMacSerialNumber = hdMacSerialNumber;
+    public void setHdUniqueCode(String hdUniqueCode) {
+        this.hdUniqueCode = hdUniqueCode;
     }
 
     public String getWinUUID() {

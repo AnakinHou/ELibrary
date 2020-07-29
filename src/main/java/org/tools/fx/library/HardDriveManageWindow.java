@@ -83,8 +83,8 @@ public class HardDriveManageWindow {
         TreeTableColumn<Volume, Long> colPTID = new TreeTableColumn<>("分区ID");
         colPTID.setPrefWidth(100d);
 
-        TreeTableColumn<Volume, String> colSerialNumber = new TreeTableColumn<>("硬盘序列号");
-        colSerialNumber.setPrefWidth(260d);
+        TreeTableColumn<Volume, String> colHdUniqueCode = new TreeTableColumn<>("硬盘序列号");
+        colHdUniqueCode.setPrefWidth(260d);
 
         TreeTableColumn<Volume, String> colUUID = new TreeTableColumn<>("分区序列号");
         colUUID.setPrefWidth(260d);
@@ -96,7 +96,7 @@ public class HardDriveManageWindow {
         colSize.setPrefWidth(120d);
 
         hdTreeTable.getColumns().addAll(colHDID, colName, colNickName, colModel, colPTID,
-                colSerialNumber, colUUID, colMountPoint, colSize);
+                colHdUniqueCode, colUUID, colMountPoint, colSize);
 
         colHDID.setCellValueFactory(new TreeItemPropertyValueFactory<Volume, Long>("hdID"));
         colName.setCellValueFactory(new TreeItemPropertyValueFactory<Volume, String>("name"));
@@ -104,8 +104,8 @@ public class HardDriveManageWindow {
                 .setCellValueFactory(new TreeItemPropertyValueFactory<Volume, String>("nickname"));
         colModel.setCellValueFactory(new TreeItemPropertyValueFactory<Volume, String>("model"));
         colPTID.setCellValueFactory(new TreeItemPropertyValueFactory<Volume, Long>("ptID"));
-        colSerialNumber.setCellValueFactory(
-                new TreeItemPropertyValueFactory<Volume, String>("serialNumber"));
+        colHdUniqueCode.setCellValueFactory(
+                new TreeItemPropertyValueFactory<Volume, String>("hdUniqueCode"));
         colUUID.setCellValueFactory(new TreeItemPropertyValueFactory<Volume, String>("uuid"));
         // colSize.setCellValueFactory(new TreeItemPropertyValueFactory<Volume, Long>("size"));
         // long gb = 1073741824l;

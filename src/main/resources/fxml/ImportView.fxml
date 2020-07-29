@@ -40,7 +40,7 @@
           <TreeTableColumn id="tc_filename" prefWidth="240" text="名称" />
           <TreeTableColumn id="tc_subtitle" minWidth="100.0" prefWidth="240" text="文件标题" />
             <TreeTableColumn id="tc_hd_id" prefWidth="75.0" text="HDID" />
-            <TreeTableColumn id="tc_hd_serialnumber" prefWidth="220.0" text="硬盘序列号" />
+            <TreeTableColumn id="tc_hd_uniquecode" prefWidth="220.0" text="硬盘识别码" />
             <TreeTableColumn id="tc_pt_id" prefWidth="75.0" text="PT_ID" />
             <TreeTableColumn id="tc_pt_uuid" minWidth="90.0" prefWidth="220.0" text="分区序列号" />
             <TreeTableColumn id="tc_mount_point" prefWidth="80.0" text="挂载点" />

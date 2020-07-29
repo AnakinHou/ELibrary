@@ -95,10 +95,9 @@
 <!-- 								<TableColumn fx:id="ptID" prefWidth="94.0" text="ptID" /> -->
 <!-- 								<TableColumn fx:id="hdName" prefWidth="204.0" text="硬盘名称" /> -->
 								<TableColumn fx:id="hdNickname" prefWidth="154.0" text="硬盘别名" />
-								<TableColumn fx:id="hdWinSerialNumber" prefWidth="119.0" text="Win序列号" />
-								<TableColumn fx:id="hdMacSerialNumber" prefWidth="159.0" text="mac序列号" />
+								<TableColumn fx:id="hdUniqueCode" prefWidth="119.0" text="硬盘识别码" />
 								<TableColumn fx:id="winUUID" prefWidth="240.0" text="winUUID" />
-								<TableColumn fx:id="macUUID" prefWidth="260.0" text="macUUID" />
+								<TableColumn fx:id="macUUID" prefWidth="280.0" text="macUUID" />
 							</columns>
 						</TableView>
 						<Pagination id="pg_tv_file_search_record" fx:id="pageFileSearchRecord" maxHeight="50.0" pageCount="1" VBox.vgrow="ALWAYS" />

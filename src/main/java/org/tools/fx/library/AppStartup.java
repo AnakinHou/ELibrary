@@ -3,6 +3,7 @@ package org.tools.fx.library;
 import java.net.URL;
 import javax.swing.ImageIcon;
 import org.tools.fx.library.db.DBHelper;
+import org.tools.fx.library.enums.PlatformEnum;
 import org.tools.fx.library.model.Result;
 import org.tools.fx.library.service.UserService;
 import org.tools.fx.library.tools.Encode;
@@ -47,18 +48,18 @@ public class AppStartup extends Application {
         // com.apple.eawt.Application.getApplication().setDockIconBadge(image);
         // com.apple.eawt.Application.getApplication().setDockIconImage(new
         // ImageIcon("/images/logo.png").getImage());
-        try {
-            URL iconURL = AppStartup.class.getResource("/images/logo.png");
-            java.awt.Image image = new ImageIcon(iconURL).getImage();
-            com.apple.eawt.Application.getApplication().setDockIconImage(image);
-        } catch (Exception e) {
-            // Won't work on Windows or Linux.
-            e.printStackTrace();
-        }
-
+//        if(App.os == PlatformEnum.MACOS) {
+//            try {
+//                URL iconURL = AppStartup.class.getResource("/images/logo.png");
+//                java.awt.Image image = new ImageIcon(iconURL).getImage();
+//                com.apple.eawt.Application.getApplication().setDockIconImage(image);
+//            } catch (Exception e) {
+//                // Won't work on Windows or Linux.
+//                e.printStackTrace();
+//            }
+//        }
 
         stage.show();
-
 
         TextField txtUsername = (TextField) scene.lookup("#txt_username");
         PasswordField txtPassword = (PasswordField) scene.lookup("#txt_password");

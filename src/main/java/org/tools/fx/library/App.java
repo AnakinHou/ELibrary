@@ -1,6 +1,7 @@
 package org.tools.fx.library;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import org.tools.dev.hd.HWDiskStore;
 import org.tools.dev.hd.HWPartition;
@@ -31,58 +32,88 @@ public class App {
 
     public static void refreshDisks() {
         currentDisks = DiskHelper.getInstance().getDisks();
-        currentVolumes = new ArrayList<>();
+        currentVolumes = new ArrayList<Volume>();
         // 先循环硬盘
         for (int i = 0; i < App.currentDisks.size(); i++) {
             HWDiskStore disk = App.currentDisks.get(i);
+            long[] sizeArr = null;
+            Volume volume = null;
             if (os == PlatformEnum.WINDOWS) {
                 // TODO
-                Volume volume = new Volume(disk);
+                volume = new Volume(disk);
                 volume.setActive(true);
                 currentVolumes.add(volume);
                 // 循环分区
                 List<HWPartition> partitions = disk.getPartitions();
+                sizeArr = new long[partitions.size()];
                 for (HWPartition part : partitions) {
                     if (part.getMountPoint() == null || part.getMountPoint().isEmpty()) {
                         continue;
                     }
-                    Volume volume2 = new Volume(part);
+                    Volume volume2 = new Volume(part,disk.getSize());
                     volume2.setActive(true);
-                    volume2.setSerialNumber(disk.getSerial());
+//                    volume2.setHdUniqueCode(volume.getHdUniqueCode());
                     volume.getVolumes().add(volume2);
                 }
             } else {
                 if (disk.getModel().equals("Disk Image")) {
                     continue;
                 }
-                Volume volume = new Volume(disk);
+                volume = new Volume(disk);
                 volume.setActive(true);
                 currentVolumes.add(volume);
                 // 循环分区
                 List<HWPartition> partitions = disk.getPartitions();
-                for (HWPartition part : partitions) {
+                sizeArr = new long[partitions.size()];
+
+                for (int z = 0; z < disk.getPartitions().size(); z++) {
+                    HWPartition part = disk.getPartitions().get(z);
+
                     if (part.getMountPoint() == null || part.getMountPoint().isEmpty()) {
+                        sizeArr[z] = 0;
                         continue;
                     }
 
                     if (part.getMountPoint().equals("/")
                             || part.getMountPoint().startsWith("/Volumes")) {
-                        Volume volume2 = new Volume(part);
+                        sizeArr[z] = part.getSize();
+
+                        Volume volume2 = new Volume(part,disk.getSize());
                         volume2.setActive(true);
-                        volume2.setSerialNumber(disk.getSerial());
-                        // 如果是移动硬盘，MacOS下无法获得分区 UUID
-                        // 所以只能自己生成一个md5的了， 硬盘model+硬盘序列号+分区size 生成一个md5值
-                        if (volume2.getUuid() == null || volume2.getUuid().equals("UNKNOWN")||  volume2.getUuid().isEmpty()) {
-                            String UUID = Encode.MD5(volume2.getModel() + volume2.getSerialNumber()
-                                    + volume2.getSize());
-                            volume2.setUuid(UUID);
-                        }
+                        // volume2.setHdUniqueCode(volume.getHdUniqueCode());
                         volume.getVolumes().add(volume2);
+                    } else {
+                        sizeArr[z] = 0;
                     }
                 }
             }
-
+            // 根据  硬盘size和下属的分区 size  生成一个 硬盘识别码
+            Arrays.sort(sizeArr);
+            String sizes = disk.getSize() + "";
+            System.out.println("=====   hd size:" + sizes);
+            for (int k = 0; k < sizeArr.length; k++) {
+                if (sizeArr[k] == 0) {
+                    continue;
+                }
+                sizes += sizeArr[k];
+                System.out.println("===========   pt size:" + sizeArr[k]);
+            }
+            System.out.println("======= === MD5前：" + sizes);
+            String hdUniqueCode = Encode.MD5(sizes);
+            volume.setHdUniqueCode(hdUniqueCode);
+            System.out.println("================== MD5后：" + hdUniqueCode);
+            for (Volume ptVlm : volume.getVolumes()) {
+                ptVlm.setHdUniqueCode(hdUniqueCode);
+            }
         }
+
+        ///////// 打印一下 currentVolumes
+        System.out.println("==============currentVolumes  刷新后================");
+        for (int i = 0; i < currentVolumes.size(); i++) {
+            System.out.println(currentVolumes.get(i).print());
+        }
+
+
     }
 
 }

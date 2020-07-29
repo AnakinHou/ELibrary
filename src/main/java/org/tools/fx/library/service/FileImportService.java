@@ -42,14 +42,13 @@ public class FileImportService {
         record.setFileTip(fileImport.getFileTip());
         record.setHdID(fileImport.getHdID());
         record.setPtID(fileImport.getPtID());
+        record.setHdUniqueCode(fileImport.getHdUniqueCode());
         if (App.os == PlatformEnum.WINDOWS) {
-            record.setHdWinSerialNumber(fileImport.getHdSerialNumber());
             record.setWinUUID(fileImport.getPtUUID());
         } else {
-            record.setHdMacSerialNumber(fileImport.getHdSerialNumber());
             record.setMacUUID(fileImport.getPtUUID());
         }
-//        record.setHdName(fileImport.getHdName());
+        // record.setHdName(fileImport.getHdName());
         record.setHdNickname(fileImport.getHdNickname());
         record.setLastModified(fileImport.getLastModified());
         // record.setMountPoint( fileImport.get);
@@ -69,11 +68,11 @@ public class FileImportService {
         }
         EntityManager em = DBHelper.getEM();
 
-//        HardDrive hd = em.find(HardDrive.class, fileList.get(0));
-//        if (hd == null) {
-//            return new Result(false, "文件所在的硬盘，在数据库中不存在");
-//        }
-//        if
+        // HardDrive hd = em.find(HardDrive.class, fileList.get(0));
+        // if (hd == null) {
+        // return new Result(false, "文件所在的硬盘，在数据库中不存在");
+        // }
+        // if
 
         EntityTransaction tran = em.getTransaction();
         tran.begin();

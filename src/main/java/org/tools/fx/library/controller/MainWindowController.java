@@ -15,7 +15,6 @@ import org.tools.fx.library.enums.PlatformEnum;
 import org.tools.fx.library.model.Volume;
 import org.tools.fx.library.tools.FormatHelper;
 import javafx.application.Platform;
-import javafx.beans.binding.Bindings;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -33,7 +32,6 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.Pagination;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TreeItem;
@@ -44,7 +42,6 @@ import javafx.scene.control.cell.ComboBoxTableCell;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.paint.Color;
-import javafx.scene.text.Text;
 import javafx.util.Callback;
 
 public class MainWindowController implements Initializable {
@@ -86,13 +83,10 @@ public class MainWindowController implements Initializable {
     @FXML
     private TableColumn<FileRecord, String> hdNickname;
     /**
-     * Win序列号
+     * 硬盘 识别码
      */
     @FXML
-    private TableColumn<FileRecord, String> hdWinSerialNumber;
-    // mac序列号
-    @FXML
-    private TableColumn<FileRecord, String> hdMacSerialNumber;
+    private TableColumn<FileRecord, String> hdUniqueCode;
     @FXML
     private TableColumn<FileRecord, String> winUUID;
     @FXML
@@ -166,10 +160,8 @@ public class MainWindowController implements Initializable {
         // ptID.setCellValueFactory(new PropertyValueFactory<FileRecord, Number>("ptID"));
         // hdName.setCellValueFactory(new PropertyValueFactory<FileRecord, String>("hdName"));
         hdNickname.setCellValueFactory(new PropertyValueFactory<FileRecord, String>("hdNickname"));
-        hdWinSerialNumber.setCellValueFactory(
-                new PropertyValueFactory<FileRecord, String>("hdWinSerialNumber"));
-        hdMacSerialNumber.setCellValueFactory(
-                new PropertyValueFactory<FileRecord, String>("hdMacSerialNumber"));
+        hdUniqueCode.setCellValueFactory(
+                new PropertyValueFactory<FileRecord, String>("hdUniqueCode"));
         winUUID.setCellValueFactory(new PropertyValueFactory<FileRecord, String>("winUUID"));
         macUUID.setCellValueFactory(new PropertyValueFactory<FileRecord, String>("macUUID"));
         fileName.setCellValueFactory(new PropertyValueFactory<FileRecord, String>("fileName"));

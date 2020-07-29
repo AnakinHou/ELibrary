@@ -55,6 +55,9 @@ public class HardDrive {
     @Column(name = "SIZE")
     private long size;
 
+    @Column(name = "HD_UNIQUE_CODE")
+    private String hdUniqueCode;
+
     /**
      * 0 不是<br>
      * 1 是usb <br>
@@ -72,11 +75,11 @@ public class HardDrive {
     // @Column(name = "PRODUCTID")
     // private String productId;
 
-    @Column(name = "WIN_SERIALNUMBER")
-    private String winSerialNumber;
-
-    @Column(name = "MAC_SERIALNUMBER")
-    private String macSerialNumber;
+    // @Column(name = "WIN_SERIALNUMBER")
+    // private String winSerialNumber;
+    //
+    // @Column(name = "MAC_SERIALNUMBER")
+    // private String macSerialNumber;
 
     // @Column(name = "UNIQUEDEVICEID")
     // private String uniqueDeviceId;
@@ -84,21 +87,6 @@ public class HardDrive {
     @OneToMany(mappedBy = "hardDrive", fetch = FetchType.EAGER)
     @Cascade(value = CascadeType.PERSIST)
     private List<Partition> partitionList;
-
-    // public Volume(String name, String model, long size, int usbHD, String vendor, String
-    // vendorId, String productId,
-    // String serialNumber, String uniqueDeviceId, List<Partition> partitionList) {
-    // this.name = name;
-    // this.model = model;
-    // this.size = size;
-    // this.usbHD = usbHD;
-    // this.vendor = vendor;
-    // this.vendorId = vendorId;
-    // this.productId = productId;
-    // this.serialNumber = serialNumber;
-    // this.uniqueDeviceId = uniqueDeviceId;
-    // this.partitionList = partitionList;
-    // }
 
     public Long getHdID() {
         return hdID;
@@ -164,6 +152,7 @@ public class HardDrive {
         this.size = size;
     }
 
+
     // public int getUsbHD() {
     // return usbHD;
     // }
@@ -196,21 +185,21 @@ public class HardDrive {
     // this.productId = productId;
     // }
 
-    public String getWinSerialNumber() {
-        return winSerialNumber;
-    }
-
-    public void setWinSerialNumber(String winSerialNumber) {
-        this.winSerialNumber = winSerialNumber;
-    }
-
-    public String getMacSerialNumber() {
-        return macSerialNumber;
-    }
-
-    public void setMacSerialNumber(String macSerialNumber) {
-        this.macSerialNumber = macSerialNumber;
-    }
+    // public String getWinSerialNumber() {
+    // return winSerialNumber;
+    // }
+    //
+    // public void setWinSerialNumber(String winSerialNumber) {
+    // this.winSerialNumber = winSerialNumber;
+    // }
+    //
+    // public String getMacSerialNumber() {
+    // return macSerialNumber;
+    // }
+    //
+    // public void setMacSerialNumber(String macSerialNumber) {
+    // this.macSerialNumber = macSerialNumber;
+    // }
 
     // public String getUniqueDeviceId() {
     // return uniqueDeviceId;
@@ -219,6 +208,14 @@ public class HardDrive {
     // public void setUniqueDeviceId(String uniqueDeviceId) {
     // this.uniqueDeviceId = uniqueDeviceId;
     // }
+
+    public String getHdUniqueCode() {
+        return hdUniqueCode;
+    }
+
+    public void setHdUniqueCode(String hdUniqueCode) {
+        this.hdUniqueCode = hdUniqueCode;
+    }
 
     public List<Partition> getPartitionList() {
         return partitionList;
@@ -233,8 +230,9 @@ public class HardDrive {
         sb.append(": ").append(getMacName());
         sb.append(",  winModel: ").append(getWinModel());
         sb.append(",  macModel: ").append(getMacModel());
-        sb.append(",  win_SerialNumber: ").append(getWinSerialNumber());
-        sb.append(",  mac_SerialNumber: ").append(getMacSerialNumber());
+        sb.append(",  hdUniqueCode: ").append(getHdUniqueCode());
+        // sb.append(", win_SerialNumber: ").append(getWinSerialNumber());
+        // sb.append(", mac_SerialNumber: ").append(getMacSerialNumber());
         // sb.append(", size: ").append(FormatUtil.formatBytesDecimal(getSize()));
         sb.append("size: ").append(String.format("%d %s", size / 1024 / 1024, "MB"));
         // sb.append(", usbHD: ").append(getUsbHD());
@@ -247,9 +245,9 @@ public class HardDrive {
         for (Partition part : partitions) {
             sb.append("\n |--- ").append(part.getWinName()).append(part.getMacName());
             // sb.append(", (id:").append(part.getIdentification()).append(") ");
-//            sb.append(", (type:").append(part.getType()).append(") ");
-            sb.append(", (win uuid:").append(part.getWinUUID() ).append(") ");
-            sb.append(", (mac uuid:").append(part.getMacUUID() ).append(") ");
+            // sb.append(", (type:").append(part.getType()).append(") ");
+            sb.append(", (win uuid:").append(part.getWinUUID()).append(") ");
+            sb.append(", (mac uuid:").append(part.getMacUUID()).append(") ");
             // sb.append(", (Maj:Min=").append(part.getMajor()).append(":").append(part.getMinor())
             // .append(")");
             // sb.append(", (size: ").append(FormatUtil.formatBytesDecimal(part.getSize()));

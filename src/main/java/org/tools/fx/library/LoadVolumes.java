@@ -62,7 +62,8 @@ public class LoadVolumes {
                 HardDrive hd = hdList.get(i);
                 Volume volume = new Volume(hd);
                 TreeItem<Volume> diskTreeItem = null;
-                if (isExistInCurrentVolumes(volume.getSerialNumber())) {
+                // 如果 数据库中有硬盘，在 当前接入电脑的硬盘中存在，那么用 hd16active图片
+                if (isExistInCurrentVolumes(volume.getHdUniqueCode())) {
                     diskTreeItem = new TreeItem<Volume>(volume, new ImageView(hdActiveIcon));
                 } else {
                     diskTreeItem = new TreeItem<Volume>(volume, new ImageView(hdInactiveIcon));
@@ -84,7 +85,7 @@ public class LoadVolumes {
             for (int i = 0; i < App.currentVolumes.size(); i++) {
                 Volume volume = App.currentVolumes.get(i);
                 //// 如果当前硬盘 在数据库中不存在，那么 添加到列表
-                HardDrive hd = findHDFromDBHardDrives(hdList, volume.getSerialNumber());
+                HardDrive hd = findHDFromDBHardDrives(hdList, volume.getHdUniqueCode());
                 // System.out.println("========== "+volume.getNickname() + ",
                 // serialNumber:"+volume.getSerialNumber()+", mount: "+volume.getMountPoint());
                 if (hd == null) {
@@ -111,11 +112,6 @@ public class LoadVolumes {
                         if (pt == null) {
                             continue;
                         }
-                        if (vlm.getSerialNumber() == null || vlm.getSerialNumber().isEmpty()) {
-                            vlm.setSerialNumber(
-                                    App.os == PlatformEnum.WINDOWS ? hd.getWinSerialNumber()
-                                            : hd.getMacSerialNumber());
-                        }
                         vlm.setPtID(pt.getPtID());
                     }
                 }
@@ -125,27 +121,19 @@ public class LoadVolumes {
         return rootItem;
     }
 
-    private boolean isExistInCurrentVolumes(String hdSerial) {
+    private boolean isExistInCurrentVolumes(String uniqueCode) {
         for (int i = 0; i < App.currentVolumes.size(); i++) {
-            if (App.currentVolumes.get(i).getSerialNumber().equals(hdSerial)) {
+            if (App.currentVolumes.get(i).getHdUniqueCode().equals(uniqueCode)) {
                 return true;
             }
         }
         return false;
     }
 
-    private HardDrive findHDFromDBHardDrives(List<HardDrive> hdList, String hdSerial) {
-        if (App.os == PlatformEnum.WINDOWS) {
-            for (int i = 0; i < hdList.size(); i++) {
-                if (hdList.get(i).getWinSerialNumber().equals(hdSerial)) {
-                    return hdList.get(i);
-                }
-            }
-        } else {
-            for (int i = 0; i < hdList.size(); i++) {
-                if (hdList.get(i).getMacSerialNumber().equals(hdSerial)) {
-                    return hdList.get(i);
-                }
+    private HardDrive findHDFromDBHardDrives(List<HardDrive> hdList, String uniqueCode) {
+        for (int i = 0; i < hdList.size(); i++) {
+            if (hdList.get(i).getHdUniqueCode().equals(uniqueCode)) {
+                return hdList.get(i);
             }
         }
         return null;

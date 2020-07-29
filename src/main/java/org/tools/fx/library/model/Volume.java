@@ -1,6 +1,7 @@
 package org.tools.fx.library.model;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import org.tools.dev.hd.HWDiskStore;
 import org.tools.dev.hd.HWPartition;
@@ -18,12 +19,13 @@ public class Volume {
 
     private String model;
     private long size;
+    private String hdUniqueCode;
     // 1 是usb 0 不是 2 unkown
     // private int usbHD;
     // private String vendor;
     // private String vendorId;
     // private String productId;
-    private String serialNumber;
+    // private String serialNumber;
     // private String uniqueDeviceId;
     /**
      * 1 硬盘<br>
@@ -66,22 +68,17 @@ public class Volume {
         // this. vendor = disk.getve;
         // this. vendorId =disk.get;
         // this.productId;
-        this.serialNumber = disk.getSerial().toUpperCase();
+        // this.serialNumber = disk.getSerial().toUpperCase();
         // this. uniqueDeviceId = disk.;
         // 如果sesrialNumber 为空，那么就自动生成一个 实在没办法了
-        if (serialNumber == null || serialNumber.isEmpty()) {
-            // 硬盘size和下属的分区 size
-            String sizes = size + "";
-            for (HWPartition pt : disk.getPartitions()) {
-                sizes += pt.getSize();
-            }
-            serialNumber = Encode.MD5(sizes);
-        }
+        // if (serialNumber == null || serialNumber.isEmpty()) {
+        // 硬盘size和下属的分区 size
+
         volumes = new ArrayList<>();
     }
 
 
-    public Volume(HWPartition partition) {
+    public Volume(HWPartition partition, long hdSize) {
         this.vType = 2; // 分区
         // this.ptID;
         // this.identification = partition.getIdentification();
@@ -89,8 +86,19 @@ public class Volume {
         this.nickname = partition.getName();
         this.size = partition.getSize();
         this.type = partition.getType();
-        this.uuid = partition.getUuid().toUpperCase();
         this.mountPoint = partition.getMountPoint();
+        // 如果是移动硬盘，MacOS下无法获得分区 UUID
+        // 所以只能自己生成一个md5的了，硬盘size+ 分区size 生成一个md5值
+        // 硬盘model这个不准， windows下和macOS下 不一样
+        // mountPoint也不准，因为有可能 修改分区名称
+        this.uuid = Encode.MD5(hdSize + "" + this.size);
+//        if (partition.getUuid() == null || partition.getUuid().equalsIgnoreCase("unknown")
+//                || partition.getUuid().isEmpty()) {
+//            System.out.println("==================== HWPartition  uuid:" + partition.getUuid()
+//                    + ",  fakeUUID:" + uuid);
+//        } else {
+//            this.uuid = partition.getUuid().toUpperCase();
+//        }
     }
 
     public Volume(HardDrive hd) {
@@ -98,14 +106,16 @@ public class Volume {
         this.nickname = hd.getNickname();
         this.vType = 1; // 硬盘
         this.size = hd.getSize();
+        this.hdUniqueCode = hd.getHdUniqueCode();
+        System.out.println("========== Volume   HardDrive  size:" + size);
         if (App.os == PlatformEnum.WINDOWS) {
             this.name = hd.getWinName();
             this.model = hd.getWinModel();
-            this.serialNumber = hd.getWinSerialNumber();
+            // this.serialNumber = hd.getWinSerialNumber();
         } else {
             this.name = hd.getMacName();
             this.model = hd.getMacModel();
-            this.serialNumber = hd.getMacSerialNumber();
+            // this.serialNumber = hd.getMacSerialNumber();
         }
         if (this.nickname == null || this.nickname.isEmpty()) {
             this.nickname = this.model;
@@ -117,23 +127,25 @@ public class Volume {
     public Volume(Partition pt) {
         this.ptID = pt.getPtID();
         this.hdID = pt.getHardDrive().getHdID();
-//        System.out.println("============ Volume pt, hdID:"+hdID);
+        // System.out.println("============ Volume pt, hdID:"+hdID);
         this.vType = 2; // 分区
         this.nickname = pt.getNickname();
         // this.identification = pt.getIdentification();
 
         this.size = pt.getSize();
+        System.out.println("=================== Volume  Partition size:" + size);
         // this.type = pt.getType();
         if (App.os == PlatformEnum.WINDOWS) {
-            this.uuid = pt.getWinUUID().toUpperCase();
+            this.uuid = pt.getWinUUID() == null ? "" : pt.getWinUUID().toUpperCase();
             this.name = pt.getWinName();
             this.mountPoint = pt.getWinMountPoint();
         } else {
-            this.uuid = pt.getMacUUID().toUpperCase();
+            this.uuid = pt.getMacUUID() == null ? "" : pt.getMacUUID().toUpperCase();
             this.name = pt.getMacName();
             this.mountPoint = pt.getMacMountPoint();
         }
     }
+
 
     public String toString() {
         // 如果是硬盘
@@ -151,8 +163,11 @@ public class Volume {
     public String print() {
         StringBuilder sb = new StringBuilder(this.getName());
         sb.append(":  ");
+        sb.append(" name: ").append(getName());
+        sb.append(" nickname: ").append(getNickname());
         sb.append(" model: ").append(getModel());
-        sb.append(",  SerialNumber: ").append(getSerialNumber());
+        // sb.append(", SerialNumber: ").append(getSerialNumber());
+        sb.append(",  hdUniqueCode: ").append(getHdUniqueCode());
         // sb.append(", size: ").append(FormatUtil.formatBytesDecimal(getSize()));
         sb.append("size: ").append(String.format("%d %s", size / 1024 / 1024, "MB"));
 
@@ -213,13 +228,12 @@ public class Volume {
         this.size = size;
     }
 
-
-    public String getSerialNumber() {
-        return serialNumber;
+    public String getHdUniqueCode() {
+        return hdUniqueCode;
     }
 
-    public void setSerialNumber(String serialNumber) {
-        this.serialNumber = serialNumber;
+    public void setHdUniqueCode(String hdUniqueCode) {
+        this.hdUniqueCode = hdUniqueCode;
     }
 
     public int getvType() {

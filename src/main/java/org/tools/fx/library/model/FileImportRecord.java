@@ -1,7 +1,6 @@
 package org.tools.fx.library.model;
 
 import java.io.File;
-import java.util.List;
 import org.tools.fx.library.App;
 
 public class FileImportRecord {
@@ -22,9 +21,9 @@ public class FileImportRecord {
     private String hdNickname;
 
     /**
-     * 硬盘序列号
+     * 硬盘唯一号
      */
-    private String hdSerialNumber;
+    private String hdUniqueCode;
 
     private Long ptID;
     /**
@@ -166,14 +165,12 @@ public class FileImportRecord {
         this.hdNickname = hdNickname;
     }
 
-
-
-    public String getHdSerialNumber() {
-        return hdSerialNumber;
+    public String getHdUniqueCode() {
+        return hdUniqueCode;
     }
 
-    public void setHdSerialNumber(String hdSerialNumber) {
-        this.hdSerialNumber = hdSerialNumber;
+    public void setHdUniqueCode(String hdUniqueCode) {
+        this.hdUniqueCode = hdUniqueCode;
     }
 
     public Long getPtID() {

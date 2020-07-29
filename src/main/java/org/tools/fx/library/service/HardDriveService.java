@@ -33,14 +33,15 @@ public class HardDriveService {
         hd.setNickname(volume.getNickname());
         // hd.setProductId(productId);
         hd.setSize(volume.getSize());
+        hd.setHdUniqueCode(volume.getHdUniqueCode());
         if (App.os == PlatformEnum.WINDOWS) {
             hd.setWinName(volume.getName());
             hd.setWinModel(volume.getModel());
-            hd.setWinSerialNumber(volume.getSerialNumber());
+//            hd.setWinSerialNumber(volume.getSerialNumber());
         } else {
             hd.setMacName(volume.getName());
             hd.setMacModel(volume.getModel());
-            hd.setMacSerialNumber(volume.getSerialNumber());
+//            hd.setMacSerialNumber(volume.getSerialNumber());
         }
         return hd;
     }

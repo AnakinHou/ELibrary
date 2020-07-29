@@ -110,9 +110,9 @@ public class ImportDocWindow {
                         "tc_hd_id");
 
         // 硬盘序列号
-        TreeTableColumn<FileImportRecord, String> tcHDSerialNumber =
+        TreeTableColumn<FileImportRecord, String> tcHDUniqueCode =
                 (TreeTableColumn<FileImportRecord, String>) getTreeColumnFormTreeTableView(list,
-                        "tc_hd_serialnumber");
+                        "tc_hd_uniquecode");
         TreeTableColumn<FileImportRecord, Long> tcPTID =
                 (TreeTableColumn<FileImportRecord, Long>) getTreeColumnFormTreeTableView(list,
                         "tc_pt_id");
@@ -163,8 +163,8 @@ public class ImportDocWindow {
                 new TreeItemPropertyValueFactory<FileImportRecord, String>("subtitle"));
         tcHDID.setCellValueFactory(
                 new TreeItemPropertyValueFactory<FileImportRecord, Long>("hdID"));
-        tcHDSerialNumber.setCellValueFactory(
-                new TreeItemPropertyValueFactory<FileImportRecord, String>("hdSerialNumber"));
+        tcHDUniqueCode.setCellValueFactory(
+                new TreeItemPropertyValueFactory<FileImportRecord, String>("hdUniqueCode"));
         tcPTID.setCellValueFactory(
                 new TreeItemPropertyValueFactory<FileImportRecord, Long>("ptID"));
         tcPTUUID.setCellValueFactory(
@@ -500,6 +500,7 @@ public class ImportDocWindow {
             TreeItem<FileImportRecord> node = children.get(z);
             if (node.getValue().isFile()) {
                 for (int i = 0; i < recordList.size(); i++) {
+                    System.out.println("===== delete file path:"+node.getValue().getFilePath());
                     if (recordList.get(i).getFilePath().equals(node.getValue().getFilePath())) {
                         recordList.remove(i);
                         break;
@@ -574,7 +575,7 @@ public class ImportDocWindow {
             String folderPath = parentFolder.getAbsolutePath();
             // System.out.println("===== folderPath:" + folderPath);
             // 根据 parentFolder 获取文件所在的硬盘信息
-            String serialNumber = null;
+            String hdUniqueCode = null;
             String hdNickname = null;
             String ptUUID = null;
             String mountPoint = null;
@@ -584,7 +585,28 @@ public class ImportDocWindow {
 
             if (App.os == PlatformEnum.WINDOWS) {
                 platform = PlatformEnum.WINDOWS.toString();
-
+                System.out.println("============ folderPath:" + folderPath);
+                Volume vlm = getVolumeFormCurrentVolumes(folderPath);
+                if (vlm == null || vlm.getHdID() == null) {
+                    Alert alert = new Alert(AlertType.WARNING);
+                    alert.setTitle("警告");
+                    alert.setHeaderText("无法选择这些文件");
+                    alert.setContentText("文件所在的硬盘或分区，还没有保存到数据库!");
+                    alert.show();
+                    return;
+                }
+                hdID = vlm.getHdID();
+                ptID = vlm.getPtID();
+                hdUniqueCode = vlm.getHdUniqueCode();
+                hdNickname = vlm.getNickname();
+                ptUUID = vlm.getUuid();
+                mountPoint = vlm.getMountPoint()+"\\";
+                System.out.println("==== hdID:"+hdID);
+                System.out.println("======= ptID:"+ptID);
+                System.out.println("========== hdUniqueCode:"+hdUniqueCode);
+                System.out.println("============== hdNickname:"+hdNickname); 
+                System.out.println("================= ptUUID:"+ptUUID); 
+                System.out.println("==================== mountPoint:"+mountPoint); 
             } else {
                 platform = PlatformEnum.MACOS.toString();
                 // 挂载点 类似这样 /Volumes/Others
@@ -600,7 +622,7 @@ public class ImportDocWindow {
                     }
                     hdID = vlm.getHdID();
                     ptID = vlm.getPtID();
-                    serialNumber = vlm.getSerialNumber();
+                    hdUniqueCode = vlm.getHdUniqueCode();
                     hdNickname = vlm.getNickname();
                     ptUUID = vlm.getUuid();
                     mountPoint = vlm.getMountPoint();
@@ -620,7 +642,7 @@ public class ImportDocWindow {
                     }
                     hdID = vlm.getHdID();
                     ptID = vlm.getPtID();
-                    serialNumber = vlm.getSerialNumber();
+                    hdUniqueCode = vlm.getHdUniqueCode();
                     hdNickname = vlm.getNickname();
                     ptUUID = vlm.getUuid();
                     mountPoint = "/";
@@ -629,7 +651,7 @@ public class ImportDocWindow {
 
             // 先创建一个根结点
             FileImportRecord rootFI = new FileImportRecord(parentFolder);
-            rootFI.setHdSerialNumber(serialNumber);
+            rootFI.setHdUniqueCode(hdUniqueCode);
             rootFI.setHdID(hdID);
             TreeItem<FileImportRecord> itemRoot = new TreeItem<FileImportRecord>(rootFI);
             itemRoot.setExpanded(true);
@@ -645,7 +667,7 @@ public class ImportDocWindow {
                     fi.setHdID(hdID);
                     fi.setPtID(ptID);
                     fi.setPtUUID(ptUUID);
-                    fi.setHdSerialNumber(serialNumber);
+                    fi.setHdUniqueCode(hdUniqueCode);
                     fi.setHdNickname(hdNickname);
                     fi.setMountPoint(mountPoint);
                     fi.setPlatform(platform);
@@ -654,7 +676,7 @@ public class ImportDocWindow {
                     itemRoot.getChildren().add(item);
                 } else {
                     TreeItem<FileImportRecord> folderItem = loadMoreFiles(recordList, files[i],
-                            serialNumber, hdNickname, hdID, ptID, ptUUID, mountPoint, platform);
+                            hdUniqueCode, hdNickname, hdID, ptID, ptUUID, mountPoint, platform);
                     itemRoot.getChildren().add(folderItem);
                 }
             }
@@ -664,7 +686,7 @@ public class ImportDocWindow {
     }
 
     private TreeItem<FileImportRecord> loadMoreFiles(List<FileImportRecord> recordList, File folder,
-            String serialNumber, String hdNickname, Long hdID, Long ptID, String ptUUID,
+            String hdUniqueCode, String hdNickname, Long hdID, Long ptID, String ptUUID,
             String mountPoint, String platform) {
         FileImportRecord folderRecord = new FileImportRecord(folder);
         TreeItem<FileImportRecord> parentfolderItem =
@@ -678,7 +700,7 @@ public class ImportDocWindow {
                 }
                 FileImportRecord fi = new FileImportRecord(files[i]);
                 fi.setFilePath(fi.getFilePath().replaceFirst(mountPoint, ""));
-                fi.setHdSerialNumber(serialNumber);
+                fi.setHdUniqueCode(hdUniqueCode);
                 fi.setHdNickname(hdNickname);
                 fi.setHdID(hdID);
                 fi.setPtID(ptID);
@@ -690,7 +712,7 @@ public class ImportDocWindow {
                 parentfolderItem.getChildren().add(fileItem);
             } else {
                 TreeItem<FileImportRecord> folderItem = loadMoreFiles(recordList, files[i],
-                        serialNumber, hdNickname, hdID, ptID, ptUUID, mountPoint, platform);
+                        hdUniqueCode, hdNickname, hdID, ptID, ptUUID, mountPoint, platform);
                 // folderItem.setGraphic(folderIcon);
                 parentfolderItem.getChildren().add(folderItem);
             }
