@@ -46,7 +46,7 @@ public class App {
                 // 循环分区
                 List<HWPartition> partitions = disk.getPartitions();
                 sizeArr = new long[partitions.size()];
-//                for (HWPartition part : partitions) {
+                // for (HWPartition part : partitions) {
                 for (int z = 0; z < disk.getPartitions().size(); z++) {
                     HWPartition part = disk.getPartitions().get(z);
                     if (part.getMountPoint() == null || part.getMountPoint().isEmpty()) {
@@ -54,9 +54,9 @@ public class App {
                         continue;
                     }
                     sizeArr[z] = part.getSize();
-                    Volume volume2 = new Volume(part,disk.getSize());
+                    Volume volume2 = new Volume(part);
                     volume2.setActive(true);
-//                    volume2.setHdUniqueCode(volume.getHdUniqueCode());
+                    // volume2.setHdUniqueCode(volume.getHdUniqueCode());
                     volume.getVolumes().add(volume2);
                 }
             } else {
@@ -82,7 +82,7 @@ public class App {
                             || part.getMountPoint().startsWith("/Volumes")) {
                         sizeArr[z] = part.getSize();
 
-                        Volume volume2 = new Volume(part,disk.getSize());
+                        Volume volume2 = new Volume(part);
                         volume2.setActive(true);
                         // volume2.setHdUniqueCode(volume.getHdUniqueCode());
                         volume.getVolumes().add(volume2);
@@ -91,27 +91,29 @@ public class App {
                     }
                 }
             }
-            // 根据  硬盘size和下属的分区 size  生成一个 硬盘识别码
+            // 根据 硬盘size和下属的分区 size 生成一个 硬盘识别码
             Arrays.sort(sizeArr);
             String sizes = "";
             long hdSize = 0;
-            System.out.println("=====   hd size:" + sizes);
+            // System.out.println("===== hd size:" + sizes);
             for (int k = 0; k < sizeArr.length; k++) {
                 if (sizeArr[k] == 0) {
                     continue;
                 }
                 sizes += sizeArr[k];
-                hdSize +=sizeArr[k];
-                System.out.println("===========   pt size:" + sizeArr[k]);
+                hdSize += sizeArr[k];
+                // System.out.println("=========== pt size:" + sizeArr[k]);
             }
-            System.out.println("======= === MD5前：" + hdSize+sizes);
-            String hdUniqueCode = Encode.MD5(hdSize+sizes);
-            System.out.println("===== "+Encode.MD5(sizes));
+            // System.out.println("======= === MD5前：" + hdSize+sizes);
+            String hdUniqueCode = Encode.MD5(hdSize + sizes);
+            // System.out.println("===== "+Encode.MD5(sizes));
             volume.setHdUniqueCode(hdUniqueCode);
             volume.setSize(hdSize);
-            System.out.println("================== MD5后：" + hdUniqueCode);
+            // System.out.println("================== MD5后：" + hdUniqueCode);
             for (Volume ptVlm : volume.getVolumes()) {
                 ptVlm.setHdUniqueCode(hdUniqueCode);
+                ptVlm.setUuid(Encode.MD5(hdSize + "" + ptVlm.getSize()));
+
             }
         }
 

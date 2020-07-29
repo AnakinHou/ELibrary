@@ -82,7 +82,7 @@ public class Volume {
     }
 
 
-    public Volume(HWPartition partition, long hdSize) {
+    public Volume(HWPartition partition ) {
         this.vType = 2; // 分区
         // this.ptID;
         // this.identification = partition.getIdentification();
@@ -95,7 +95,7 @@ public class Volume {
         // 所以只能自己生成一个md5的了，硬盘size+ 分区size 生成一个md5值
         // 硬盘model这个不准， windows下和macOS下 不一样
         // mountPoint也不准，因为有可能 修改分区名称
-        this.uuid = Encode.MD5(hdSize + "" + this.size);
+//        this.uuid = Encode.MD5(hdSize + "" + this.size);
 //        if (partition.getUuid() == null || partition.getUuid().equalsIgnoreCase("unknown")
 //                || partition.getUuid().isEmpty()) {
 //            System.out.println("==================== HWPartition  uuid:" + partition.getUuid()
@@ -111,7 +111,7 @@ public class Volume {
         this.vType = 1; // 硬盘
         this.size = hd.getSize();
         this.hdUniqueCode = hd.getHdUniqueCode();
-        System.out.println("========== Volume   HardDrive  size:" + size);
+//        System.out.println("========== Volume   HardDrive  size:" + size);
         if (App.os == PlatformEnum.WINDOWS) {
             this.name = hd.getWinName();
             this.model = hd.getWinModel();
@@ -137,8 +137,9 @@ public class Volume {
         // this.identification = pt.getIdentification();
 
         this.size = pt.getSize();
-        System.out.println("=================== Volume  Partition size:" + size);
+//        System.out.println("=================== Volume  Partition size:" + size);
         this.uuid = pt.getUuid()  ;
+        System.out.println("=================== Volume  Partition uuid:" + uuid);
         // this.type = pt.getType();
         if (App.os == PlatformEnum.WINDOWS) {
             this.name = pt.getWinName();
