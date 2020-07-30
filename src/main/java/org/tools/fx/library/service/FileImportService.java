@@ -43,11 +43,8 @@ public class FileImportService {
         record.setHdID(fileImport.getHdID());
         record.setPtID(fileImport.getPtID());
         record.setHdUniqueCode(fileImport.getHdUniqueCode());
-        if (App.os == PlatformEnum.WINDOWS) {
-            record.setWinUUID(fileImport.getPtUUID());
-        } else {
-            record.setMacUUID(fileImport.getPtUUID());
-        }
+        record.setUuid(fileImport.getPtUUID());
+        
         // record.setHdName(fileImport.getHdName());
         record.setHdNickname(fileImport.getHdNickname());
         record.setLastModified(fileImport.getLastModified());

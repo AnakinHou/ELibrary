@@ -53,12 +53,14 @@ public class Partition {
     @Column(name = "NICKNAME")
     private String nickname;
 
+  @Column(name = "UUID")
+  private String uuid;
 
-    @Column(name = "WIN_UUID")
-    private String winUUID;
-
-    @Column(name = "MAC_UUID")
-    private String macUUID;
+//    @Column(name = "WIN_UUID")
+//    private String winUUID;
+//
+//    @Column(name = "MAC_UUID")
+//    private String macUUID;
 
     @Column(name = "SIZE")
     private long size;
@@ -152,24 +154,32 @@ public class Partition {
         this.size = size;
     }
 
-    public String getWinUUID() {
-        return winUUID;
-    }
-
-    public void setWinUUID(String winUUID) {
-        this.winUUID = winUUID;
-    }
-
-    public String getMacUUID() {
-        return macUUID;
-    }
-
-    public void setMacUUID(String macUUID) {
-        this.macUUID = macUUID;
-    }
+//    public String getWinUUID() {
+//        return winUUID;
+//    }
+//
+//    public void setWinUUID(String winUUID) {
+//        this.winUUID = winUUID;
+//    }
+//
+//    public String getMacUUID() {
+//        return macUUID;
+//    }
+//
+//    public void setMacUUID(String macUUID) {
+//        this.macUUID = macUUID;
+//    }
 
     public String getWinMountPoint() {
         return winMountPoint;
+    }
+
+    public String getUuid() {
+        return uuid;
+    }
+
+    public void setUuid(String uuid) {
+        this.uuid = uuid;
     }
 
     public void setWinMountPoint(String winMountPoint) {

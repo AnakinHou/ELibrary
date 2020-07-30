@@ -87,10 +87,6 @@ public class MainWindowController implements Initializable {
      */
     @FXML
     private TableColumn<FileRecord, String> hdUniqueCode;
-    @FXML
-    private TableColumn<FileRecord, String> winUUID;
-    @FXML
-    private TableColumn<FileRecord, String> macUUID;
     // 文件名称
     @FXML
     private TableColumn<FileRecord, String> fileName;
@@ -114,7 +110,8 @@ public class MainWindowController implements Initializable {
     private TableColumn<FileRecord, String> fileSuffix;
     @FXML
     private TableColumn<FileRecord, String> lastModified;
-
+    @FXML
+    private TableColumn<FileRecord, String> UUID;
     @FXML
     private Pagination pageFileSearchRecord;
 
@@ -160,10 +157,9 @@ public class MainWindowController implements Initializable {
         // ptID.setCellValueFactory(new PropertyValueFactory<FileRecord, Number>("ptID"));
         // hdName.setCellValueFactory(new PropertyValueFactory<FileRecord, String>("hdName"));
         hdNickname.setCellValueFactory(new PropertyValueFactory<FileRecord, String>("hdNickname"));
-        hdUniqueCode.setCellValueFactory(
-                new PropertyValueFactory<FileRecord, String>("hdUniqueCode"));
-        winUUID.setCellValueFactory(new PropertyValueFactory<FileRecord, String>("winUUID"));
-        macUUID.setCellValueFactory(new PropertyValueFactory<FileRecord, String>("macUUID"));
+        hdUniqueCode
+                .setCellValueFactory(new PropertyValueFactory<FileRecord, String>("hdUniqueCode"));
+        UUID.setCellValueFactory(new PropertyValueFactory<FileRecord, String>("uuid"));
         fileName.setCellValueFactory(new PropertyValueFactory<FileRecord, String>("fileName"));
         subtitle.setCellValueFactory(new PropertyValueFactory<FileRecord, String>("subtitle"));
         filePath.setCellValueFactory(new PropertyValueFactory<FileRecord, String>("filePath"));
@@ -241,14 +237,18 @@ public class MainWindowController implements Initializable {
 
                             @Override
                             protected void updateItem(String item, boolean empty) {
-                                super.updateItem(item, empty);
+//                                super.updateItem(item, empty);
                                 if (item == null || item.isEmpty()) {
 
                                 } else {
                                     // getTableRow().getItem();
-                                    this.setStyle("-fx-font-weight: bold;-fx-font-size: 16;");
-                                    this.setTextFill(Color.rgb(34, 140, 34));
-                                    setText(item);
+                                    this.setText(null);
+                                    this.setGraphic(null);
+                                    if(!empty) {
+                                        this.setStyle("-fx-font-weight: bold;-fx-font-size: 16;");
+                                        this.setTextFill(Color.rgb(34, 140, 34));
+                                        setText(item);
+                                    }
                                 }
                             }
                         };
@@ -453,20 +453,10 @@ public class MainWindowController implements Initializable {
 
             // windows 外接的硬盘 挂载点 可能会跟上次不一样，
             // 另外，如果文件在外接硬盘上，但是本次硬盘没有接入电脑，那么该文件显示 inactive
-            if (App.os == PlatformEnum.WINDOWS) {
-                for (int i = 0; i < data.size(); i++) {
-                    FileRecord fr = data.get(i);
-                    String currentMountPoint =
-                            findCurrentMountPointFromCurrentVolumes(fr.getWinUUID());
-                    fr.setMountPoint(currentMountPoint);
-                }
-            } else {
-                for (int i = 0; i < data.size(); i++) {
-                    FileRecord fr = data.get(i);
-                    String currentMountPoint =
-                            findCurrentMountPointFromCurrentVolumes(fr.getMacUUID());
-                    fr.setMountPoint(currentMountPoint);
-                }
+            for (int i = 0; i < data.size(); i++) {
+                FileRecord fr = data.get(i);
+                String currentMountPoint = findCurrentMountPointFromCurrentVolumes(fr.getUuid());
+                fr.setMountPoint(currentMountPoint);
             }
 
             ObservableList<FileRecord> list = FXCollections.observableArrayList(data);

@@ -37,11 +37,11 @@ public class HardDriveService {
         if (App.os == PlatformEnum.WINDOWS) {
             hd.setWinName(volume.getName());
             hd.setWinModel(volume.getModel());
-//            hd.setWinSerialNumber(volume.getSerialNumber());
+            // hd.setWinSerialNumber(volume.getSerialNumber());
         } else {
             hd.setMacName(volume.getName());
             hd.setMacModel(volume.getModel());
-//            hd.setMacSerialNumber(volume.getSerialNumber());
+            // hd.setMacSerialNumber(volume.getSerialNumber());
         }
         return hd;
     }
@@ -51,12 +51,11 @@ public class HardDriveService {
         // pt.setHardDriveID(hardDriveID);
         pt.setNickname(volume.getNickname());
         pt.setSize(volume.getSize());
+        pt.setUuid(volume.getUuid());
         if (App.os == PlatformEnum.WINDOWS) {
-            pt.setWinUUID(volume.getUuid());
             pt.setWinName(volume.getName());
             pt.setWinMountPoint(volume.getMountPoint());
         } else {
-            pt.setMacUUID(volume.getUuid());
             pt.setMacName(volume.getName());
             pt.setMacMountPoint(volume.getMountPoint());
         }
@@ -80,8 +79,8 @@ public class HardDriveService {
                 if (vol.getHdID() == null) {
                     HardDrive hd = generateHardDrive(vol);
                     em.persist(hd);
-                     em.flush();
-//                     em.clear();
+                    em.flush();
+                    // em.clear();
                     List<Volume> volumes = vol.getVolumes();
                     for (int j = 0; j < volumes.size(); j++) {
                         Partition pt = generatePartiton(volumes.get(j));

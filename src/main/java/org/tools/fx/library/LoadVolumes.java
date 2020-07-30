@@ -5,7 +5,6 @@ import javax.persistence.EntityManager;
 import org.tools.fx.library.db.DBHelper;
 import org.tools.fx.library.entity.HardDrive;
 import org.tools.fx.library.entity.Partition;
-import org.tools.fx.library.enums.PlatformEnum;
 import org.tools.fx.library.model.Volume;
 import javafx.scene.control.TreeItem;
 import javafx.scene.image.Image;
@@ -140,19 +139,11 @@ public class LoadVolumes {
     }
 
     private Partition findPTFromDBHardDrives(List<Partition> ptList, String uuid) {
-        if (App.os == PlatformEnum.WINDOWS) {
             for (int i = 0; i < ptList.size(); i++) {
-                if (ptList.get(i).getWinUUID().equals(uuid)) {
+                if (ptList.get(i).getUuid().equals(uuid)) {
                     return ptList.get(i);
                 }
             }
-        } else {
-            for (int i = 0; i < ptList.size(); i++) {
-                if (ptList.get(i).getMacUUID().equals(uuid)) {
-                    return ptList.get(i);
-                }
-            }
-        }
         return null;
     }
 

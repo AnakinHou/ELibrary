@@ -33,11 +33,8 @@ public class FileRecord {
     @Column(name = "HD_UNIQUE_CODE")
     private String hdUniqueCode;
 
-    @Column(name = "WIN_UUID")
-    private String winUUID;
-
-    @Column(name = "MAC_UUID")
-    private String macUUID;
+    @Column(name = "UUID")
+    private String uuid;
 
     @Column(name = "FILENAME")
     private String fileName;
@@ -159,20 +156,12 @@ public class FileRecord {
         this.hdUniqueCode = hdUniqueCode;
     }
 
-    public String getWinUUID() {
-        return winUUID;
+    public String getUuid() {
+        return uuid;
     }
 
-    public void setWinUUID(String winUUID) {
-        this.winUUID = winUUID;
-    }
-
-    public String getMacUUID() {
-        return macUUID;
-    }
-
-    public void setMacUUID(String macUUID) {
-        this.macUUID = macUUID;
+    public void setUuid(String uuid) {
+        this.uuid = uuid;
     }
 
     public String getFileName() {

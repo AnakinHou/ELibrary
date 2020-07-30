@@ -138,13 +138,12 @@ public class Volume {
 
         this.size = pt.getSize();
         System.out.println("=================== Volume  Partition size:" + size);
+        this.uuid = pt.getUuid()  ;
         // this.type = pt.getType();
         if (App.os == PlatformEnum.WINDOWS) {
-            this.uuid = pt.getWinUUID() == null ? "" : pt.getWinUUID().toUpperCase();
             this.name = pt.getWinName();
             this.mountPoint = pt.getWinMountPoint();
         } else {
-            this.uuid = pt.getMacUUID() == null ? "" : pt.getMacUUID().toUpperCase();
             this.name = pt.getMacName();
             this.mountPoint = pt.getMacMountPoint();
         }

@@ -246,8 +246,7 @@ public class HardDrive {
             sb.append("\n |--- ").append(part.getWinName()).append(part.getMacName());
             // sb.append(", (id:").append(part.getIdentification()).append(") ");
             // sb.append(", (type:").append(part.getType()).append(") ");
-            sb.append(", (win uuid:").append(part.getWinUUID()).append(") ");
-            sb.append(", (mac uuid:").append(part.getMacUUID()).append(") ");
+            sb.append(", (  uuid:").append(part.getUuid()).append(") ");
             // sb.append(", (Maj:Min=").append(part.getMajor()).append(":").append(part.getMinor())
             // .append(")");
             // sb.append(", (size: ").append(FormatUtil.formatBytesDecimal(part.getSize()));

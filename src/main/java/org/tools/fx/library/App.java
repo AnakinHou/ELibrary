@@ -95,21 +95,21 @@ public class App {
             Arrays.sort(sizeArr);
             String sizes = "";
             long hdSize = 0;
-//            System.out.println("=====   hd size:" + sizes);
+            System.out.println("=====   hd size:" + sizes);
             for (int k = 0; k < sizeArr.length; k++) {
                 if (sizeArr[k] == 0) {
                     continue;
                 }
                 sizes += sizeArr[k];
                 hdSize +=sizeArr[k];
-//                System.out.println("===========   pt size:" + sizeArr[k]);
+                System.out.println("===========   pt size:" + sizeArr[k]);
             }
-//            System.out.println("======= === MD5前：" + hdSize+sizes);
+            System.out.println("======= === MD5前：" + hdSize+sizes);
             String hdUniqueCode = Encode.MD5(hdSize+sizes);
-//            System.out.println("===== "+Encode.MD5(sizes));
+            System.out.println("===== "+Encode.MD5(sizes));
             volume.setHdUniqueCode(hdUniqueCode);
             volume.setSize(hdSize);
-//            System.out.println("================== MD5后：" + hdUniqueCode);
+            System.out.println("================== MD5后：" + hdUniqueCode);
             for (Volume ptVlm : volume.getVolumes()) {
                 ptVlm.setHdUniqueCode(hdUniqueCode);
             }

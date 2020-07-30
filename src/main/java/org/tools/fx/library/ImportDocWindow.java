@@ -66,7 +66,7 @@ public class ImportDocWindow {
         // 阻止事件传递到所有者的窗口
         // s3.initModality(Modality.WINDOW_MODAL);
         importStage.getIcons().add(new Image("/images/logo.png"));
-        
+
         VBox vbox = null;
         try {
             vbox = FXMLLoader.load(getClass().getResource("/fxml/ImportView.fxml"));
@@ -501,7 +501,7 @@ public class ImportDocWindow {
             TreeItem<FileImportRecord> node = children.get(z);
             if (node.getValue().isFile()) {
                 for (int i = 0; i < recordList.size(); i++) {
-                    System.out.println("===== delete file path:"+node.getValue().getFilePath());
+                    System.out.println("===== delete file path:" + node.getValue().getFilePath());
                     if (recordList.get(i).getFilePath().equals(node.getValue().getFilePath())) {
                         recordList.remove(i);
                         break;
@@ -601,13 +601,13 @@ public class ImportDocWindow {
                 hdUniqueCode = vlm.getHdUniqueCode();
                 hdNickname = vlm.getNickname();
                 ptUUID = vlm.getUuid();
-                mountPoint = vlm.getMountPoint()+"\\";
-                System.out.println("==== hdID:"+hdID);
-                System.out.println("======= ptID:"+ptID);
-                System.out.println("========== hdUniqueCode:"+hdUniqueCode);
-                System.out.println("============== hdNickname:"+hdNickname); 
-                System.out.println("================= ptUUID:"+ptUUID); 
-                System.out.println("==================== mountPoint:"+mountPoint); 
+                mountPoint = vlm.getMountPoint() + "\\";
+                System.out.println("==== hdID:" + hdID);
+                System.out.println("======= ptID:" + ptID);
+                System.out.println("========== hdUniqueCode:" + hdUniqueCode);
+                System.out.println("============== hdNickname:" + hdNickname);
+                System.out.println("================= ptUUID:" + ptUUID);
+                System.out.println("==================== mountPoint:" + mountPoint);
             } else {
                 platform = PlatformEnum.MACOS.toString();
                 // 挂载点 类似这样 /Volumes/Others
@@ -660,6 +660,7 @@ public class ImportDocWindow {
             for (int i = 0; i < files.length; i++) {
                 if (files[i].isFile()) {
                     if (files[i].getName().equals(".DS_Store")
+                            || files[i].getName().equals("._.DS_Store")
                             || files[i].getName().equals(".localized")) {
                         continue;
                     }
@@ -695,7 +696,8 @@ public class ImportDocWindow {
         File[] files = folder.listFiles();
         for (int i = 0; i < files.length; i++) {
             if (files[i].isFile()) {
-                if (files[i].getName().equals(".DS_Store") || files[i].getName().equals("._.DS_Store")
+                if (files[i].getName().equals(".DS_Store")
+                        || files[i].getName().equals("._.DS_Store")
                         || files[i].getName().equals(".localized")) {
                     continue;
                 }
