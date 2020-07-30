@@ -8,6 +8,7 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.image.Image;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
@@ -22,6 +23,7 @@ public class MainWindow extends Application {
     public void start(Stage primaryStage) throws Exception {
         VBox rootNode = FXMLLoader.load(getClass().getResource("/fxml/MainView.fxml"));
         Scene scene = new Scene(rootNode);
+       primaryStage.getIcons().add(new Image("/images/logo.png"));
 //        primaryStage.setResizable(false);
         primaryStage.setTitle("Elibrary");
         primaryStage.setScene(scene);

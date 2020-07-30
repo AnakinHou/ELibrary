@@ -46,10 +46,14 @@ public class App {
                 // 循环分区
                 List<HWPartition> partitions = disk.getPartitions();
                 sizeArr = new long[partitions.size()];
-                for (HWPartition part : partitions) {
+//                for (HWPartition part : partitions) {
+                for (int z = 0; z < disk.getPartitions().size(); z++) {
+                    HWPartition part = disk.getPartitions().get(z);
                     if (part.getMountPoint() == null || part.getMountPoint().isEmpty()) {
+                        sizeArr[z] = 0;
                         continue;
                     }
+                    sizeArr[z] = part.getSize();
                     Volume volume2 = new Volume(part,disk.getSize());
                     volume2.setActive(true);
 //                    volume2.setHdUniqueCode(volume.getHdUniqueCode());
@@ -89,19 +93,23 @@ public class App {
             }
             // 根据  硬盘size和下属的分区 size  生成一个 硬盘识别码
             Arrays.sort(sizeArr);
-            String sizes = disk.getSize() + "";
-            System.out.println("=====   hd size:" + sizes);
+            String sizes = "";
+            long hdSize = 0;
+//            System.out.println("=====   hd size:" + sizes);
             for (int k = 0; k < sizeArr.length; k++) {
                 if (sizeArr[k] == 0) {
                     continue;
                 }
                 sizes += sizeArr[k];
-                System.out.println("===========   pt size:" + sizeArr[k]);
+                hdSize +=sizeArr[k];
+//                System.out.println("===========   pt size:" + sizeArr[k]);
             }
-            System.out.println("======= === MD5前：" + sizes);
-            String hdUniqueCode = Encode.MD5(sizes);
+//            System.out.println("======= === MD5前：" + hdSize+sizes);
+            String hdUniqueCode = Encode.MD5(hdSize+sizes);
+//            System.out.println("===== "+Encode.MD5(sizes));
             volume.setHdUniqueCode(hdUniqueCode);
-            System.out.println("================== MD5后：" + hdUniqueCode);
+            volume.setSize(hdSize);
+//            System.out.println("================== MD5后：" + hdUniqueCode);
             for (Volume ptVlm : volume.getVolumes()) {
                 ptVlm.setHdUniqueCode(hdUniqueCode);
             }

@@ -65,7 +65,8 @@ public class ImportDocWindow {
         importStage.initModality(Modality.APPLICATION_MODAL);
         // 阻止事件传递到所有者的窗口
         // s3.initModality(Modality.WINDOW_MODAL);
-
+        importStage.getIcons().add(new Image("/images/logo.png"));
+        
         VBox vbox = null;
         try {
             vbox = FXMLLoader.load(getClass().getResource("/fxml/ImportView.fxml"));
@@ -694,7 +695,7 @@ public class ImportDocWindow {
         File[] files = folder.listFiles();
         for (int i = 0; i < files.length; i++) {
             if (files[i].isFile()) {
-                if (files[i].getName().equals(".DS_Store")
+                if (files[i].getName().equals(".DS_Store") || files[i].getName().equals("._.DS_Store")
                         || files[i].getName().equals(".localized")) {
                     continue;
                 }

@@ -13,6 +13,10 @@ import org.tools.fx.library.tools.Encode;
 
 public class Volume {
 
+    /**
+     * 这是个约数  只要大于这个值那么
+     */
+    private final long  approximateTB = 1000 * 1000 * 1000 * 1000;
     private Long hdID;
     private String name;
     private String nickname;
