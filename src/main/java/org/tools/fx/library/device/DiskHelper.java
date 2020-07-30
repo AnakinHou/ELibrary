@@ -54,11 +54,11 @@ public class DiskHelper {
         List<HWDiskStore> macDiskList = MacHWDiskStore.getDisks();
         // 获取USB设备信息
         // List<UsbDevice> usbList = MacUsbDevice.getUsbDevices(true);
-        for (int i = 0; i < macDiskList.size(); i++) {
-            HWDiskStore disk = macDiskList.get(i);
-            if (disk.getModel().equals("Disk Image")) {
-                continue;
-            }
+//        for (int i = 0; i < macDiskList.size(); i++) {
+//            HWDiskStore disk = macDiskList.get(i);
+//            if (disk.getModel().equals("Disk Image")) {
+//                continue;
+//            }
             // if (disk.getSerial() == null || "".equals(disk.getSerial())) {
             // UsbDevice usbDisk = getDiskFromUSB(usbList, disk.getModel());
             // if (usbDisk != null) {
@@ -71,12 +71,12 @@ public class DiskHelper {
             // disk.setSerial(usbDisk.getSerialNumber());
             // }
             // }
-            System.out.println("disk: " + disk.toString());
-            List<HWPartition> partitions = disk.getPartitions();
-            for (HWPartition p : partitions) {
-                System.out.println("    |-- " + p.toString());
-            }
-        }
+//            System.out.println("disk: " + disk.toString());
+//            List<HWPartition> partitions = disk.getPartitions();
+//            for (HWPartition p : partitions) {
+//                System.out.println("    |-- " + p.toString());
+//            }
+//        }
 
 
         return macDiskList;
@@ -84,14 +84,14 @@ public class DiskHelper {
 
     private List<HWDiskStore> getWinDisks() {
         List<HWDiskStore> winDiskList = WindowsHWDiskStore.getDisks();
-        for (int i = 0; i < winDiskList.size(); i++) {
-            HWDiskStore disk = winDiskList.get(i);
-            System.out.println("disk: " + disk.toString());
-            List<HWPartition> partitions = disk.getPartitions();
-            for (HWPartition p : partitions) {
-                System.out.println("    |-- " + p.toString());
-            }
-        }
+//        for (int i = 0; i < winDiskList.size(); i++) {
+//            HWDiskStore disk = winDiskList.get(i);
+//            System.out.println("disk: " + disk.toString());
+//            List<HWPartition> partitions = disk.getPartitions();
+//            for (HWPartition p : partitions) {
+//                System.out.println("    |-- " + p.toString());
+//            }
+//        }
         return winDiskList;
     }
 

@@ -1,6 +1,9 @@
 package org.tools.fx.library;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import javax.persistence.EntityManager;
 import org.tools.fx.library.db.DBHelper;
 import org.tools.fx.library.entity.HardDrive;
@@ -56,95 +59,100 @@ public class LoadVolumes {
         } else {
             Image hdInactiveIcon =
                     new Image(getClass().getResourceAsStream("/images/hd16inactive.png"));
-
-            for (int i = 0; i < hdList.size(); i++) {
-                HardDrive hd = hdList.get(i);
-                Volume volume = new Volume(hd);
+            List<Volume> volumeNode = mergeDBHardDriveAndCurrentVolumes(hdList, App.currentVolumes);
+            for (int i = 0; i < volumeNode.size(); i++) {
+                Volume hdvlm = volumeNode.get(i);
                 TreeItem<Volume> diskTreeItem = null;
                 // 如果 数据库中有硬盘，在 当前接入电脑的硬盘中存在，那么用 hd16active图片
-                if (isExistInCurrentVolumes(volume.getHdUniqueCode())) {
-                    diskTreeItem = new TreeItem<Volume>(volume, new ImageView(hdActiveIcon));
+                if (hdvlm.isActive()) {
+                    diskTreeItem = new TreeItem<Volume>(hdvlm, new ImageView(hdActiveIcon));
                 } else {
-                    diskTreeItem = new TreeItem<Volume>(volume, new ImageView(hdInactiveIcon));
+                    diskTreeItem = new TreeItem<Volume>(hdvlm, new ImageView(hdInactiveIcon));
                 }
                 diskTreeItem.setExpanded(true);
                 rootItem.getChildren().add(diskTreeItem);
-
-                // 挂分区
-                List<Partition> ptList = hd.getPartitionList();
+                
+                List<Volume> ptList = hdvlm.getVolumes();
                 for (int j = 0; j < ptList.size(); j++) {
-                    Partition pt = ptList.get(j);
-                    Volume vlm = new Volume(pt);
+                    Volume vlm = ptList.get(j);
                     TreeItem<Volume> volumeTreeItem = new TreeItem<Volume>(vlm);
                     diskTreeItem.getChildren().add(volumeTreeItem);
                 }
             }
-
-            // 检查 当前硬盘列表是否在数据库中存在，不存在，那么添加
-            for (int i = 0; i < App.currentVolumes.size(); i++) {
-                Volume volume = App.currentVolumes.get(i);
-                //// 如果当前硬盘 在数据库中不存在，那么 添加到列表
-                HardDrive hd = findHDFromDBHardDrives(hdList, volume.getHdUniqueCode());
-                // System.out.println("========== "+volume.getNickname() + ",
-                // serialNumber:"+volume.getSerialNumber()+", mount: "+volume.getMountPoint());
-                if (hd == null) {
-                    TreeItem<Volume> diskTreeItem =
-                            new TreeItem<Volume>(volume, new ImageView(hdActiveIcon));
-                    diskTreeItem.setExpanded(true);
-                    rootItem.getChildren().add(diskTreeItem);
-
-                    // 挂分区
-                    List<Volume> volumes = volume.getVolumes();
-                    for (Volume vlm : volumes) {
-                        TreeItem<Volume> volumeTreeItem = new TreeItem<Volume>(vlm);
-                        diskTreeItem.getChildren().add(volumeTreeItem);
-                    }
-                } else {
-                    // 如果已经存在，那么需要更新一下 App.currentVolumes 的 硬盘id 分区id
-                    // System.out.println("========== 已经存在 更新 partition:" );
-                    volume.setHdID(hd.getHdID());
-                    List<Volume> volumes = volume.getVolumes();
-                    List<Partition> ptList = hd.getPartitionList();
-                    for (Volume vlm : volumes) {
-                        vlm.setHdID(hd.getHdID());
-                        Partition pt = findPTFromDBHardDrives(ptList, vlm.getUuid());
-                        if (pt == null) {
-                            continue;
-                        }
-                        vlm.setPtID(pt.getPtID());
-                    }
-                }
-            }
-
         }
         return rootItem;
     }
 
-    private boolean isExistInCurrentVolumes(String uniqueCode) {
-        for (int i = 0; i < App.currentVolumes.size(); i++) {
-            if (App.currentVolumes.get(i).getHdUniqueCode().equals(uniqueCode)) {
-                return true;
+
+
+    private List<Volume> mergeDBHardDriveAndCurrentVolumes(List<HardDrive> hdList,
+            List<Volume> currentVolumes) {
+        HashMap<String, HardDrive> hdMap = new HashMap<String, HardDrive>(hdList.size());
+        HashMap<String, Volume> volumeMap = new HashMap<String, Volume>(currentVolumes.size());
+
+        List<Volume> volumeNode = new ArrayList<Volume>();
+        List<Volume> newVolumes = new ArrayList<Volume>();
+
+        for (HardDrive hd : hdList) {
+            hdMap.put(hd.getHdUniqueCode(), hd);
+        }
+
+        for (Volume volume : currentVolumes) {
+            volumeMap.put(volume.getHdUniqueCode(), volume);
+            // 如果当前 挂载的 硬盘中，在数据库中不存在，那么说明是新硬盘
+            if (!hdMap.containsKey(volume.getHdUniqueCode())) {
+                newVolumes.add(volume);
             }
         }
-        return false;
-    }
 
-    private HardDrive findHDFromDBHardDrives(List<HardDrive> hdList, String uniqueCode) {
-        for (int i = 0; i < hdList.size(); i++) {
-            if (hdList.get(i).getHdUniqueCode().equals(uniqueCode)) {
-                return hdList.get(i);
-            }
-        }
-        return null;
-    }
+        for (HardDrive dbHD : hdList) {
+            Volume hdVLM = new Volume(dbHD);
+            volumeNode.add(hdVLM);
+            /// 如果 数据库中的硬盘，在电脑当前挂在的硬盘中不存在
+            // 那就说明，硬盘，没有接入电脑
+            Volume pluginHD = volumeMap.get(dbHD.getHdUniqueCode());
+            if (pluginHD == null) {
+                hdVLM.setActive(false);
 
-    private Partition findPTFromDBHardDrives(List<Partition> ptList, String uuid) {
-            for (int i = 0; i < ptList.size(); i++) {
-                if (ptList.get(i).getUuid().equals(uuid)) {
-                    return ptList.get(i);
+                List<Partition> dbptList = dbHD.getPartitionList();
+                for (int i = 0; i < dbptList.size(); i++) {
+                    hdVLM.getVolumes().add(new Volume(dbptList.get(i)));
                 }
+                continue;
             }
-        return null;
+
+            // 如果 数据库中的硬盘，在当前电脑 接入的硬盘里，存在
+            // 那说明 该硬盘 接入了当前电脑 active = true
+            hdVLM.setActive(true);
+            // pluginHD.setvType(1);
+            pluginHD.setNickname(hdVLM.getNickname());
+            pluginHD.setHdID(hdVLM.getHdID());
+
+            // 接下来merge 分区
+            List<Partition> dbptList = dbHD.getPartitionList();
+            List<Volume> pluginPtList = pluginHD.getVolumes();
+            // HashMap<String, Partition> dbptMap = new HashMap<String, Partition>(dbptList.size());
+            HashMap<String, Volume> pluginPtMap = new HashMap<String, Volume>(pluginPtList.size());
+            for (Volume volume : pluginPtList) {
+                pluginPtMap.put(volume.getUuid(), volume);
+            }
+
+            for (Partition pt : dbptList) {
+                Volume ptVLM = new Volume(pt);
+
+                Volume pluginVLM = pluginPtMap.get(ptVLM.getUuid());
+                pluginVLM.setHdID(dbHD.getHdID());
+                pluginVLM.setPtID(pt.getPtID());
+                pluginVLM.setNickname(pt.getNickname());
+                ptVLM.setMountPoint(pluginVLM.getMountPoint());
+                hdVLM.getVolumes().add(ptVLM);
+            }
+        }
+
+        volumeNode.addAll(newVolumes);
+        return volumeNode;
     }
+
+
 
 }

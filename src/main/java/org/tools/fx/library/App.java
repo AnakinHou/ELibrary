@@ -118,12 +118,10 @@ public class App {
         }
 
         ///////// 打印一下 currentVolumes
-        System.out.println("==============currentVolumes  刷新后================");
-        for (int i = 0; i < currentVolumes.size(); i++) {
-            System.out.println(currentVolumes.get(i).print());
-        }
-
-
+        // System.out.println("==============currentVolumes 刷新后================");
+        // for (int i = 0; i < currentVolumes.size(); i++) {
+        // System.out.println(currentVolumes.get(i).print());
+        // }
     }
 
 }

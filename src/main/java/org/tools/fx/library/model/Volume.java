@@ -91,6 +91,7 @@ public class Volume {
         this.size = partition.getSize();
         this.type = partition.getType();
         this.mountPoint = partition.getMountPoint();
+//        System.out.println("============= partition.getMountPoint():"+partition.getMountPoint());
         // 如果是移动硬盘，MacOS下无法获得分区 UUID
         // 所以只能自己生成一个md5的了，硬盘size+ 分区size 生成一个md5值
         // 硬盘model这个不准， windows下和macOS下 不一样
@@ -139,14 +140,14 @@ public class Volume {
         this.size = pt.getSize();
 //        System.out.println("=================== Volume  Partition size:" + size);
         this.uuid = pt.getUuid()  ;
-        System.out.println("=================== Volume  Partition uuid:" + uuid);
+//        System.out.println("=================== Volume  Partition uuid:" + uuid);
         // this.type = pt.getType();
         if (App.os == PlatformEnum.WINDOWS) {
             this.name = pt.getWinName();
-            this.mountPoint = pt.getWinMountPoint();
+//            this.mountPoint = pt.getWinMountPoint();
         } else {
             this.name = pt.getMacName();
-            this.mountPoint = pt.getMacMountPoint();
+//            this.mountPoint = pt.getMacMountPoint();
         }
     }
 
@@ -155,12 +156,19 @@ public class Volume {
         // 如果是硬盘
         if (this.vType == 1) {
             if (this.nickname == null || this.nickname.isEmpty()) {
-                return this.name + "[hdID:" + hdID + "]";
+//                return this.name + "[hdID:" + hdID + "]";
+                return this.name  ;
             } else {
-                return this.name + " [" + this.nickname + "]" + "[hdID:" + hdID + "]";
+//                return this.name + " [" + this.nickname + "]" + "[hdID:" + hdID + "]";
+                return this.name + " [" + this.nickname + "]"  ;
             }
         } else {
-            return this.name + " [" + this.mountPoint + "]" + "[ptID:" + ptID + "]";
+//            return this.name + " [" + this.mountPoint + "]" + "[ptID:" + ptID + "]";
+            if (this.nickname == null || this.nickname.isEmpty()) {
+                return this.name + " [" + this.mountPoint + "]";
+            } else {
+                return this.nickname + " [" + this.mountPoint + "]";
+            }
         }
     }
 

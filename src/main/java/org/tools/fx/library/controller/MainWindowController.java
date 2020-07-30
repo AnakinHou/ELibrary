@@ -290,7 +290,7 @@ public class MainWindowController implements Initializable {
             @Override
             public void changed(ObservableValue<? extends Number> observable, Number oldValue,
                     Number newValue) {
-                System.out.println("=========== page listener:" + newValue.intValue());
+//                System.out.println("=========== page listener:" + newValue.intValue());
                 loadFileSearRecord(newValue.intValue());
             }
         });

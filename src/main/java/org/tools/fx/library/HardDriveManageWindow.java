@@ -203,10 +203,10 @@ public class HardDriveManageWindow {
 
                 for (int i = 0; i < list.size(); i++) {
                     Volume hd = list.get(i).getValue();
-                    System.out.println(hd.getName() + ", " + hd.getNickname());
-                    for (int j = 0; j < hd.getVolumes().size(); j++) {
-                        System.out.println("    |---" + hd.getVolumes().get(j).getName());
-                    }
+//                    System.out.println(hd.getName() + ", " + hd.getNickname());
+//                    for (int j = 0; j < hd.getVolumes().size(); j++) {
+//                        System.out.println("    |---" + hd.getVolumes().get(j).getName());
+//                    }
                     if (hd.getNickname() == null || hd.getNickname().isEmpty()
                             || hd.getModel() == null || hd.getModel().isEmpty()) {
                         Alert alert = new Alert(AlertType.INFORMATION);

@@ -602,12 +602,12 @@ public class ImportDocWindow {
                 hdNickname = vlm.getNickname();
                 ptUUID = vlm.getUuid();
                 mountPoint = vlm.getMountPoint() + "\\";
-                System.out.println("==== hdID:" + hdID);
-                System.out.println("======= ptID:" + ptID);
-                System.out.println("========== hdUniqueCode:" + hdUniqueCode);
-                System.out.println("============== hdNickname:" + hdNickname);
-                System.out.println("================= ptUUID:" + ptUUID);
-                System.out.println("==================== mountPoint:" + mountPoint);
+//                System.out.println("==== hdID:" + hdID);
+//                System.out.println("======= ptID:" + ptID);
+//                System.out.println("========== hdUniqueCode:" + hdUniqueCode);
+//                System.out.println("============== hdNickname:" + hdNickname);
+//                System.out.println("================= ptUUID:" + ptUUID);
+//                System.out.println("==================== mountPoint:" + mountPoint);
             } else {
                 platform = PlatformEnum.MACOS.toString();
                 // 挂载点 类似这样 /Volumes/Others
