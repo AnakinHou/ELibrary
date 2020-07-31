@@ -41,10 +41,7 @@ public class AppStartup extends Application {
         stage.setResizable(false);
         stage.setTitle("Elibrary");
         stage.setScene(scene);
-
-        stage.getIcons().add(new Image("/images/logo.png"));
-        // stage.getIcons().add(new Image(<yourclassname>.class.getResourceAsStream("icon.png")));
-        // Image image = new Image("/images/logo.png");
+        stage.getIcons().add(new Image(getClass().getResourceAsStream("/images/Logo.png") ));
         // com.apple.eawt.Application.getApplication().setDockIconBadge(image);
         // com.apple.eawt.Application.getApplication().setDockIconImage(new
         // ImageIcon("/images/logo.png").getImage());

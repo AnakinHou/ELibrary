@@ -23,7 +23,9 @@ public class MainWindow extends Application {
     public void start(Stage primaryStage) throws Exception {
         VBox rootNode = FXMLLoader.load(getClass().getResource("/fxml/MainView.fxml"));
         Scene scene = new Scene(rootNode);
-       primaryStage.getIcons().add(new Image("/images/logo.png"));
+       primaryStage.getIcons().add(new Image(getClass().getResourceAsStream("/images/Logo.png")));
+//        primaryStage.getIcons().add(new Image(MainWindow.class.getResourceAsStream("/images/logo.png")));
+//        primaryStage.getIcons().add(new Image(getClass().getResource("/images/logo.png").getPath()));
 //        primaryStage.setResizable(false);
         primaryStage.setTitle("Elibrary");
         primaryStage.setScene(scene);

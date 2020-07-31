@@ -17,7 +17,7 @@ public class UserService {
                 .setParameter("uname", encodeUsername).setParameter("upass", encodePassword)
                 .getResultList();
         em.close();
-        if (userList == null || userList.size() > 1) {
+        if (userList == null || userList.size() ==0 || userList.size() > 1) {
             return new Result(false, "没有查询到用户");
         } else {
             return new Result(true, "成功查询到用户");

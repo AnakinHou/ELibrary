@@ -31,7 +31,7 @@
                      <font>
                         <Font name="System Bold" size="24.0" />
                      </font></Label>
-                  <TextField id="txt_username" prefHeight="50.0" prefWidth="300.0" promptText="请输入用户名" text="admin">
+                  <TextField id="txt_username" prefHeight="50.0" prefWidth="300.0" promptText="请输入用户名" text="">
                      <font>
                         <Font size="24.0" />
                      </font></TextField>
@@ -42,7 +42,7 @@
                      <font>
                         <Font name="System Bold" size="24.0" />
                      </font></Label>
-                  <PasswordField id="txt_password" prefHeight="50.0" prefWidth="300.0" promptText="请输入密码" text="admin">
+                  <PasswordField id="txt_password" prefHeight="50.0" prefWidth="300.0" promptText="请输入密码" text="">
                      <font>
                         <Font size="24.0" />
                      </font></PasswordField>

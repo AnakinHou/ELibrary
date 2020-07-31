@@ -56,6 +56,7 @@ public class ImportDocWindow {
     // private ImageView folderIcon = new ImageView(new
     // Image(getClass().getResourceAsStream("/images/folder.png")));
     private Image folderIcon = new Image(getClass().getResourceAsStream("/images/folder.png"));
+//    private Image folderIcon = new Image(getClass().getResource("/images/folder.png").getPath());
     private List<FileImportRecord> recordList = new LinkedList<>();
 
     public ImportDocWindow(Stage parentStage) {
@@ -65,8 +66,9 @@ public class ImportDocWindow {
         importStage.initModality(Modality.APPLICATION_MODAL);
         // 阻止事件传递到所有者的窗口
         // s3.initModality(Modality.WINDOW_MODAL);
-        importStage.getIcons().add(new Image("/images/logo.png"));
-
+        importStage.getIcons().add(new Image(getClass().getResourceAsStream("/images/Logo.png")));
+//        importStage.getIcons().add(new Image(ImportDocWindow.class.getResourceAsStream("/images/logo.png")));
+//        importStage.getIcons().add(new Image(getClass().getResource("/images/logo.png").getPath()));
         VBox vbox = null;
         try {
             vbox = FXMLLoader.load(getClass().getResource("/fxml/ImportView.fxml"));
@@ -586,7 +588,7 @@ public class ImportDocWindow {
 
             if (App.os == PlatformEnum.WINDOWS) {
                 platform = PlatformEnum.WINDOWS.toString();
-                System.out.println("============ folderPath:" + folderPath);
+//                System.out.println("============ folderPath:" + folderPath);
                 Volume vlm = getVolumeFormCurrentVolumes(folderPath);
                 if (vlm == null || vlm.getHdID() == null) {
                     Alert alert = new Alert(AlertType.WARNING);

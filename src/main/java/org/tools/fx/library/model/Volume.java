@@ -114,11 +114,11 @@ public class Volume {
         this.hdUniqueCode = hd.getHdUniqueCode();
 //        System.out.println("========== Volume   HardDrive  size:" + size);
         if (App.os == PlatformEnum.WINDOWS) {
-            this.name = hd.getWinName();
+            this.name = hd.getWinName() == null ? "" :hd.getWinName();
             this.model = hd.getWinModel();
             // this.serialNumber = hd.getWinSerialNumber();
         } else {
-            this.name = hd.getMacName();
+            this.name = hd.getMacName()==null ? "" :hd.getMacName();
             this.model = hd.getMacModel();
             // this.serialNumber = hd.getMacSerialNumber();
         }

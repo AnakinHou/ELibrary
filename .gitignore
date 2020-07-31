@@ -4,7 +4,7 @@
 .settings/
 logs/
 db/
-
+src/main/resources/db/
 
 target/
 pom.xml.tag

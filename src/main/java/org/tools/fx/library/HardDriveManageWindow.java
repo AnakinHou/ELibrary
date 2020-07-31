@@ -55,8 +55,9 @@ public class HardDriveManageWindow {
         // 阻止事件传递到任何其他应用程序窗口
         hdStage.initModality(Modality.APPLICATION_MODAL);
 
-        hdStage.getIcons().add(new Image("/images/logo.png"));
-        
+        hdStage.getIcons().add(new Image(getClass().getResourceAsStream("/images/Logo.png")));
+//        hdStage.getIcons().add(new Image(HardDriveManageWindow.class.getResourceAsStream("/images/logo.png")));
+//        hdStage.getIcons().add(new Image(getClass().getResource("/images/logo.png").getPath()));
         Button btnRefresh = new Button("刷新");
         Button btnSave = new Button("保存");
         btnSave.setDefaultButton(true);

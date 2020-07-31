@@ -22,7 +22,7 @@
 		<maven.compiler.source>1.8</maven.compiler.source>
 		<maven.compiler.target>1.8</maven.compiler.target>
 		<project.hibernate.version>5.2.10.Final</project.hibernate.version>
-
+		<licenseFilePath>LICENSE</licenseFilePath>
 		<slf4j.version>1.7.12</slf4j.version>
 		<log4j.version>1.2.17</log4j.version>
 	</properties>
@@ -30,21 +30,63 @@
 	<build>
 		<finalName>ELibrary</finalName>
 		<plugins>
-			<plugin>
-				<groupId>com.zenjava</groupId>
-				<artifactId>javafx-maven-plugin</artifactId>
-				<version>8.8.3</version>
-				<configuration>
-					<mainClass>org.tools.fx.library.MainApp</mainClass>
+<!-- 			<plugin> -->
+<!-- 				<groupId>com.zenjava</groupId> -->
+<!-- 				<artifactId>javafx-maven-plugin</artifactId> -->
+<!-- 				<version>8.8.3</version> -->
+<!-- 				<configuration> -->
+<!-- 					<mainClass>org.tools.fx.library.AppStartup</mainClass> -->
 
 					<!-- only required if signing the jar file -->
 					<!-- <keyStoreAlias>example-user</keyStoreAlias> -->
 					<!-- <keyStorePassword>example-password</keyStorePassword> -->
 					<!-- <allPermissions>true</allPermissions> -->
+<!-- 					<appName>ELibrary</appName> -->
+<!-- 					<vendor>AnakinHou</vendor> -->
+<!-- 					<needShortcut>true</needShortcut> -->
+<!-- 					<bundler>EXE</bundler> -->
+<!-- 					<bundleArguments> -->
+<!-- 						<installdirChooser>true</installdirChooser>指示用户是否可以选择应用程序安装目录的标志 -->
+<!--  					<licenseFile>${licenseFilePath}</licenseFile> 安装时显示的用户协议 -->
+<!-- 					</bundleArguments> -->
+<!-- 				</configuration> -->
+<!-- 			</plugin> -->
 
-				</configuration>
-			</plugin>
-
+             <plugin>
+				<groupId>io.github.fvarrui</groupId>
+				<artifactId>javapackager</artifactId>
+					<version>1.1.0</version>
+					 <executions>
+        <execution>
+            <phase>package</phase>
+            <goals>
+                <goal>package</goal>
+            </goals>
+            <configuration>
+                <!-- mandatory -->
+                <mainClass>org.tools.fx.library.AppStartup</mainClass>
+                <!-- optional -->
+                <bundleJre>true</bundleJre>
+                <jrePath>C:\ProgramFiles\Java\jre1.8.0_181</jrePath>
+<!--                 <generateInstaller>true</generateInstaller>         -->
+                <administratorRequired>false</administratorRequired>
+                <platform>windows</platform>
+                <additionalResources>
+                    <additionalResource>../db</additionalResource>
+                    <additionalResource>/META-INF</additionalResource>
+                    <additionalResource>/fxml</additionalResource>
+                    <additionalResource>/images</additionalResource>
+                    <additionalResource>/styles</additionalResource>
+                    <additionalResource>log4j.xml</additionalResource>
+                </additionalResources>
+<!--                 <linuxConfig>...</linuxConfig> -->
+<!--                 <macConfig>...</macConfig> -->
+<!--                 <winConfig>...</winConfig> -->
+                
+            </configuration>
+        </execution>
+    </executions>
+			</plugin> 		
 			<!-- clean lifecycle, see https://maven.apache.org/ref/current/maven-core/lifecycles.html#clean_Lifecycle -->
 			<plugin>
 				<artifactId>maven-clean-plugin</artifactId>
