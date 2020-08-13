@@ -12,21 +12,26 @@ import org.tools.fx.library.model.Result;
 import org.tools.fx.library.model.Volume;
 import org.tools.fx.library.service.FileImportService;
 import org.tools.fx.library.tools.FormatHelper;
+import org.tools.fx.library.widgets.CheckBoxTreeTableRow;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
+import javafx.geometry.Insets;
+import javafx.geometry.Orientation;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.ContentDisplay;
 import javafx.scene.control.TextField;
+import javafx.scene.control.ToolBar;
 import javafx.scene.control.TreeItem;
+import javafx.scene.control.CheckBoxTreeItem;
 import javafx.scene.control.TreeTableCell;
 import javafx.scene.control.TreeTableColumn;
 import javafx.scene.control.TreeTableView;
@@ -37,7 +42,10 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.control.TreeTableColumn.CellDataFeatures;
 import javafx.scene.control.TreeTableColumn.CellEditEvent;
+import javafx.scene.layout.FlowPane;
+import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Font;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
@@ -56,8 +64,9 @@ public class ImportDocWindow {
     // private ImageView folderIcon = new ImageView(new
     // Image(getClass().getResourceAsStream("/images/folder.png")));
     private Image folderIcon = new Image(getClass().getResourceAsStream("/images/folder.png"));
-//    private Image folderIcon = new Image(getClass().getResource("/images/folder.png").getPath());
-    private List<FileImportRecord> recordList = new LinkedList<>();
+    private Image fileIcon = new Image(getClass().getResourceAsStream("/images/file16.png"));
+    // private Image folderIcon = new Image(getClass().getResource("/images/folder.png").getPath());
+    // private List<FileImportRecord> recordList = new LinkedList<>();
 
     public ImportDocWindow(Stage parentStage) {
         Stage importStage = new Stage();
@@ -67,98 +76,121 @@ public class ImportDocWindow {
         // 阻止事件传递到所有者的窗口
         // s3.initModality(Modality.WINDOW_MODAL);
         importStage.getIcons().add(new Image(getClass().getResourceAsStream("/images/Logo.png")));
-//        importStage.getIcons().add(new Image(ImportDocWindow.class.getResourceAsStream("/images/logo.png")));
-//        importStage.getIcons().add(new Image(getClass().getResource("/images/logo.png").getPath()));
-        VBox vbox = null;
-        try {
-            vbox = FXMLLoader.load(getClass().getResource("/fxml/ImportView.fxml"));
-            Scene scene = new Scene(vbox);
-            importStage.setScene(scene);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        importStage.setTitle("选择 视频，音频，电子书等文件或文件夹");
-        importStage.show();
+        // importStage.getIcons().add(new
+        // Image(ImportDocWindow.class.getResourceAsStream("/images/logo.png")));
+        // importStage.getIcons().add(new
+        // Image(getClass().getResource("/images/logo.png").getPath()));
 
-        Button btnDirBrowse = (Button) vbox.lookup("#btn_dir_browse");
-        Button btnFileBrowse = (Button) vbox.lookup("#btn_file_browse");
+        VBox vbox = new VBox();
+        vbox.setPrefHeight(600.0d);
+        vbox.setPrefWidth(1000.0d);
+        vbox.setMaxSize(1280.0d, 720.0d);
 
-        Button btnOpenFile = (Button) vbox.lookup("#btn_open_file");
-        Button btnDeleteFile = (Button) vbox.lookup("#btn_delete_file");
-        // 提交按钮
-        Button btnSubmitFiles = (Button) vbox.lookup("#btn_submit");
-        TextField txtBrowse = (TextField) vbox.lookup("#txt_browse");
+        ToolBar toolBar = new ToolBar();
+        toolBar.setPrefHeight(40.0d);
 
-        TreeTableView<FileImportRecord> treeTableFileImport =
-                (TreeTableView<FileImportRecord>) vbox.lookup("#ttv_file_import_record");
+        TextField txtBrowse = new TextField();
+        txtBrowse.setPrefHeight(30.0d);
+        txtBrowse.setPrefWidth(600.0d);
+        txtBrowse.setPromptText("请选择文件夹或文件");
+        txtBrowse.setFont(Font.font("System Bold", 14.0d));
 
-        ObservableList<TreeTableColumn<FileImportRecord, ?>> list =
-                treeTableFileImport.getColumns();
-        // for (int i = 0; i < list.size(); i++) {
-        // TreeTableColumn<FileImportRecord, ?> col = list.get(i);
-        // System.out.println(
-        // "======*********************8 text " + col.getText() + " " + col.getId());
-        // }
+        Button btnDirBrowse = new Button("浏览文件夹");
+        btnDirBrowse.setMnemonicParsing(false);
+        btnDirBrowse.setPrefHeight(30.0d);
+        btnDirBrowse.setFont(Font.font("System Bold", 14.0d));
+
+        Button btnFileBrowse = new Button("浏览文件");
+        btnFileBrowse.setMnemonicParsing(false);
+        btnFileBrowse.setPrefHeight(30.0d);
+        btnFileBrowse.setFont(Font.font("System Bold", 14.0d));
+
+        Button btnOpenFile = new Button("打开文件");
+        btnOpenFile.setMnemonicParsing(false);
+        btnOpenFile.setPrefHeight(30.0d);
+        // btnOpenFile.setDefaultButton(true);
+        btnOpenFile.setFont(Font.font("System Bold", 14.0d));
+
+        // Button btnDeleteFile = new Button("删除");
+        // btnDeleteFile.setMnemonicParsing(false);
+        // btnDeleteFile.setPrefHeight(30.0d);
+        // btnDeleteFile.setCancelButton(true);
+        // btnDeleteFile.setFont(Font.font("System Bold", 14.0d));
+
+        toolBar.getItems().addAll(txtBrowse, btnDirBrowse, btnFileBrowse, btnOpenFile);
+
+        TreeTableView<FileImportRecord> treeTableView = new TreeTableView<FileImportRecord>();
+        treeTableView.setEditable(true);
+        // treeTableView VBox.vgrow="ALWAYS"
+        treeTableView.setRowFactory(item -> new CheckBoxTreeTableRow<>());
+
         // 文件名称
         TreeTableColumn<FileImportRecord, String> tcFileName =
-                (TreeTableColumn<FileImportRecord, String>) getTreeColumnFormTreeTableView(list,
-                        "tc_filename");
+                new TreeTableColumn<FileImportRecord, String>("名称");
+        tcFileName.setPrefWidth(240d);
+        tcFileName.setMinWidth(140d);
         // 文件标题"
         TreeTableColumn<FileImportRecord, String> tcSubtitle =
-                (TreeTableColumn<FileImportRecord, String>) getTreeColumnFormTreeTableView(list,
-                        "tc_subtitle");
+                new TreeTableColumn<FileImportRecord, String>("文件标题");
+        tcSubtitle.setPrefWidth(240d);
+        tcSubtitle.setMinWidth(120d);
         // 硬盘ID
         TreeTableColumn<FileImportRecord, Long> tcHDID =
-                (TreeTableColumn<FileImportRecord, Long>) getTreeColumnFormTreeTableView(list,
-                        "tc_hd_id");
-
+                new TreeTableColumn<FileImportRecord, Long>("HDID");
+        tcHDID.setPrefWidth(80d);
         // 硬盘序列号
         TreeTableColumn<FileImportRecord, String> tcHDUniqueCode =
-                (TreeTableColumn<FileImportRecord, String>) getTreeColumnFormTreeTableView(list,
-                        "tc_hd_uniquecode");
+                new TreeTableColumn<FileImportRecord, String>("硬盘识别码");
+        tcHDUniqueCode.setPrefWidth(220d);
+
         TreeTableColumn<FileImportRecord, Long> tcPTID =
-                (TreeTableColumn<FileImportRecord, Long>) getTreeColumnFormTreeTableView(list,
-                        "tc_pt_id");
+                new TreeTableColumn<FileImportRecord, Long>("PT_ID");
+        tcPTID.setPrefWidth(80d);
         // 分区序列号
         TreeTableColumn<FileImportRecord, String> tcPTUUID =
-                (TreeTableColumn<FileImportRecord, String>) getTreeColumnFormTreeTableView(list,
-                        "tc_pt_uuid");
+                new TreeTableColumn<FileImportRecord, String>("分区序列号");
+        tcPTUUID.setPrefWidth(200d);
         // 挂载点
         TreeTableColumn<FileImportRecord, String> tcMountPoint =
-                (TreeTableColumn<FileImportRecord, String>) getTreeColumnFormTreeTableView(list,
-                        "tc_mount_point");
+                new TreeTableColumn<FileImportRecord, String>("挂载点");
+        tcMountPoint.setPrefWidth(80d);
         // 文件路径
         TreeTableColumn<FileImportRecord, String> tcFilePath =
-                (TreeTableColumn<FileImportRecord, String>) getTreeColumnFormTreeTableView(list,
-                        "tc_file_path");
+                new TreeTableColumn<FileImportRecord, String>("文件路径");
+        tcFilePath.setPrefWidth(200d);
         // 文件大小
         TreeTableColumn<FileImportRecord, String> tcFileSize =
-                (TreeTableColumn<FileImportRecord, String>) getTreeColumnFormTreeTableView(list,
-                        "tc_file_size");
+                new TreeTableColumn<FileImportRecord, String>("文件大小");
+        tcFileSize.setPrefWidth(100d);
         // 最后修改时间
         TreeTableColumn<FileImportRecord, String> tcLastModified =
-                (TreeTableColumn<FileImportRecord, String>) getTreeColumnFormTreeTableView(list,
-                        "tc_last_modified_time");
+                new TreeTableColumn<FileImportRecord, String>("最后修改时间");
+        tcLastModified.setPrefWidth(128d);
         // 类型大分类
         TreeTableColumn<FileImportRecord, String> tcFileMainType =
-                (TreeTableColumn<FileImportRecord, String>) getTreeColumnFormTreeTableView(list,
-                        "tc_file_main_type");
+                new TreeTableColumn<FileImportRecord, String>("类型大分类");
+        tcFileMainType.setPrefWidth(80d);
         // 文件标记
         TreeTableColumn<FileImportRecord, String> tcFileMark =
-                (TreeTableColumn<FileImportRecord, String>) getTreeColumnFormTreeTableView(list,
-                        "tc_file_mark");
+                new TreeTableColumn<FileImportRecord, String>("文件标记");
+        tcFileMark.setPrefWidth(80d);
         // 文件备注
         TreeTableColumn<FileImportRecord, String> tcFileTip =
-                (TreeTableColumn<FileImportRecord, String>) getTreeColumnFormTreeTableView(list,
-                        "tc_file_tip");
+                new TreeTableColumn<FileImportRecord, String>("文件备注");
+        tcFileTip.setPrefWidth(210d);
         // 后缀名
         TreeTableColumn<FileImportRecord, String> tcFileSuffix =
-                (TreeTableColumn<FileImportRecord, String>) getTreeColumnFormTreeTableView(list,
-                        "tc_file_suffix");
+                new TreeTableColumn<FileImportRecord, String>("后缀名");
+        tcFileSuffix.setPrefWidth(60d);
 
         TreeTableColumn<FileImportRecord, String> tcPlatform =
-                (TreeTableColumn<FileImportRecord, String>) getTreeColumnFormTreeTableView(list,
-                        "tc_platform");
+                new TreeTableColumn<FileImportRecord, String>("系统平台");
+        tcPlatform.setPrefWidth(60d);
+
+        treeTableView.getColumns().addAll(tcFileName, tcSubtitle, tcHDID, tcHDUniqueCode, tcPTID,
+                tcPTUUID, tcMountPoint, tcFilePath, tcFileSize, tcLastModified, tcFileMainType,
+                tcFileMark, tcFileTip, tcFileSuffix, tcPlatform);
+
 
         tcFileName.setCellValueFactory(
                 new TreeItemPropertyValueFactory<FileImportRecord, String>("fileName"));
@@ -176,10 +208,70 @@ public class ImportDocWindow {
                 new TreeItemPropertyValueFactory<FileImportRecord, String>("mountPoint"));
         tcFilePath.setCellValueFactory(
                 new TreeItemPropertyValueFactory<FileImportRecord, String>("filePath"));
-        // tcFileSize.setCellValueFactory(
-        // new TreeItemPropertyValueFactory<FileImportRecord, Long>("fileSize"));
-        // tcLastModified.setCellValueFactory(
-        // new TreeItemPropertyValueFactory<FileImportRecord, Long>("lastModified"));
+        tcFileSize.setCellValueFactory(
+                new TreeItemPropertyValueFactory<FileImportRecord, String>("fileSize"));
+        tcLastModified.setCellValueFactory(
+                new TreeItemPropertyValueFactory<FileImportRecord, String>("lastModified"));
+
+        tcFileMainType.setCellValueFactory(
+                new TreeItemPropertyValueFactory<FileImportRecord, String>("fileMainType"));
+        tcFileMark.setCellValueFactory(
+                new TreeItemPropertyValueFactory<FileImportRecord, String>("fileMark"));
+        tcFileTip.setCellValueFactory(
+                new TreeItemPropertyValueFactory<FileImportRecord, String>("fileTip"));
+        tcFileSuffix.setCellValueFactory(
+                new TreeItemPropertyValueFactory<FileImportRecord, String>("fileSuffix"));
+        tcPlatform.setCellValueFactory(
+                new TreeItemPropertyValueFactory<FileImportRecord, String>("platform"));
+
+        tcFileName.setCellFactory(tcell -> new TreeTableCell<FileImportRecord, String>() {
+
+            @Override
+            protected void updateItem(String item, boolean empty) {
+
+                if (item == getItem())
+                    return;
+
+                super.updateItem(item, empty);
+                if (item == null) {
+                    super.setText(null);
+                    super.setGraphic(null);
+                } else {
+                    super.setText("      " + item.toString());
+                    super.setGraphic(null);
+                }
+            }
+        });
+
+        FlowPane bottomPane = new FlowPane(Orientation.HORIZONTAL);
+        bottomPane.setMaxHeight(40.0d);
+        bottomPane.setAlignment(Pos.CENTER_RIGHT);
+        // bottomPane.setvg
+
+        Button btnSubmitFiles = new Button("提交");
+        btnSubmitFiles.setAlignment(Pos.CENTER);
+        btnSubmitFiles.setContentDisplay(ContentDisplay.CENTER);
+        btnSubmitFiles.setDefaultButton(true);
+        btnSubmitFiles.setMnemonicParsing(true);
+        btnSubmitFiles.setPrefHeight(30.0d);
+        btnSubmitFiles.setPrefWidth(110.0d);
+        btnSubmitFiles.setMaxWidth(120.0d);
+        btnSubmitFiles.setFont(Font.font("System Bold", 14.0d));
+        FlowPane.setMargin(btnSubmitFiles, new Insets(0.0d, 50d, 0d, 0d));
+        // bottomPane.setHgap(50d);
+        bottomPane.getChildren().add(btnSubmitFiles);
+
+        vbox.getChildren().addAll(toolBar, treeTableView, bottomPane);
+        VBox.setVgrow(treeTableView, Priority.ALWAYS);
+        VBox.setVgrow(bottomPane, Priority.ALWAYS);
+
+
+        Scene scene = new Scene(vbox);
+        importStage.setScene(scene);
+
+
+        importStage.setTitle("选择 视频，音频，电子书等文件或文件夹");
+        importStage.show();
 
         tcFileSize.setCellValueFactory(
                 new Callback<TreeTableColumn.CellDataFeatures<FileImportRecord, String>, ObservableValue<String>>() {
@@ -199,17 +291,6 @@ public class ImportDocWindow {
                                 .formatDate(param.getValue().getValue().getLastModified()));
                     }
                 });
-
-        tcFileMainType.setCellValueFactory(
-                new TreeItemPropertyValueFactory<FileImportRecord, String>("fileMainType"));
-        tcFileMark.setCellValueFactory(
-                new TreeItemPropertyValueFactory<FileImportRecord, String>("fileMark"));
-        tcFileTip.setCellValueFactory(
-                new TreeItemPropertyValueFactory<FileImportRecord, String>("fileTip"));
-        tcFileSuffix.setCellValueFactory(
-                new TreeItemPropertyValueFactory<FileImportRecord, String>("fileSuffix"));
-        tcPlatform.setCellValueFactory(
-                new TreeItemPropertyValueFactory<FileImportRecord, String>("platform"));
 
         tcSubtitle.setCellFactory(
                 new Callback<TreeTableColumn<FileImportRecord, String>, TreeTableCell<FileImportRecord, String>>() {
@@ -359,7 +440,7 @@ public class ImportDocWindow {
                     // dirInitialDirectory = directory.getAbsolutePath();
                     // System.out.println(directory.getAbsolutePath());
                     txtBrowse.setText(directory.getAbsolutePath());
-                    loadFileToTreeTable(treeTableFileImport, directory.listFiles());
+                    loadFileToTreeTable(treeTableView, directory.listFiles());
                 }
             }
         });
@@ -378,7 +459,7 @@ public class ImportDocWindow {
                     txtBrowse.setText(fileList.get(0).getParent());
                     File[] files = new File[fileList.size()];
                     fileList.toArray(files);
-                    loadFileToTreeTable(treeTableFileImport, files);
+                    loadFileToTreeTable(treeTableView, files);
                 }
             }
         });
@@ -390,7 +471,7 @@ public class ImportDocWindow {
             @Override
             public void handle(ActionEvent event) {
                 TreeItem<FileImportRecord> item =
-                        treeTableFileImport.getSelectionModel().getSelectedItem();
+                        treeTableView.getSelectionModel().getSelectedItem();
                 // Desktop.getDesktop().browse(File.getParentFile().toURI());
                 if (item != null) {
                     FileImportRecord record = item.getValue();
@@ -413,52 +494,50 @@ public class ImportDocWindow {
         /**
          * 删除文件
          */
-        btnDeleteFile.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                TreeItem<FileImportRecord> item =
-                        treeTableFileImport.getSelectionModel().getSelectedItem();
-                if (item != null) {
-                    // treeTableFileImport.getRoot().getChildren().remove(item);
-                    if (item.getValue().isFile()) {
-                        for (int i = 0; i < recordList.size(); i++) {
-                            if (recordList.get(i).getFilePath()
-                                    .equals(item.getValue().getFilePath())) {
-                                recordList.remove(i);
-                                break;
-                            }
-                        }
-
-                        item.getParent().getChildren().remove(item);
-                    } else {
-                        // Alert alert = new Alert(AlertType.WARNING);
-                        // alert.setTitle("警告");
-                        // alert.setHeaderText("不允许删除文件夹");
-                        // alert.setContentText("请删除文件夹下的文件!");
-                        // alert.showAndWait();
-
-                        // Alert alert = new Alert(AlertType.CONFIRMATION);
-                        // 按钮部分可以使用预设的也可以像这样自己 new 一个
-                        Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "确定要删除文件夹吗？",
-                                new ButtonType("取消", ButtonData.NO),
-                                new ButtonType("确定", ButtonData.YES));
-                        // 设置窗口的标题
-                        alert.setTitle("删除文件夹");
-                        alert.setHeaderText("当前操作只会在该列表删除文件，并不会在硬盘上删除文件");
-                        // 设置对话框的 icon 图标，参数是主窗口的 stage
-                        alert.initOwner(importStage);
-                        // showAndWait() 将在对话框消失以前不会执行之后的代码
-                        Optional<ButtonType> buttonType = alert.showAndWait();
-                        // 根据点击结果返回
-                        if (buttonType.get().getButtonData().equals(ButtonData.YES)) {
-                            item.getParent().getChildren().remove(item);
-                            deleteFileFromTreeItem(item);
-                        }
-
-                    }
-                }
-            }
-        });
+        // btnDeleteFile.setOnAction(new EventHandler<ActionEvent>() {
+        // @Override
+        // public void handle(ActionEvent event) {
+        // TreeItem<FileImportRecord> item =
+        // treeTableView.getSelectionModel().getSelectedItem();
+        // if (item != null) {
+        // // treeTableFileImport.getRoot().getChildren().remove(item);
+        // if (item.getValue().isFile()) {
+        // for (int i = 0; i < recordList.size(); i++) {
+        // if (recordList.get(i).getFilePath()
+        // .equals(item.getValue().getFilePath())) {
+        // recordList.remove(i);
+        // break;
+        // }
+        // }
+        // item.getParent().getChildren().remove(item);
+        // } else {
+        // // Alert alert = new Alert(AlertType.WARNING);
+        // // alert.setTitle("警告");
+        // // alert.setHeaderText("不允许删除文件夹");
+        // // alert.setContentText("请删除文件夹下的文件!");
+        // // alert.showAndWait();
+        //
+        // // Alert alert = new Alert(AlertType.CONFIRMATION);
+        // // 按钮部分可以使用预设的也可以像这样自己 new 一个
+        // Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "确定要删除文件夹吗？",
+        // new ButtonType("取消", ButtonData.NO),
+        // new ButtonType("确定", ButtonData.YES));
+        // // 设置窗口的标题
+        // alert.setTitle("删除文件夹");
+        // alert.setHeaderText("当前操作只会在该列表删除文件，并不会在硬盘上删除文件");
+        // // 设置对话框的 icon 图标，参数是主窗口的 stage
+        // alert.initOwner(importStage);
+        // // showAndWait() 将在对话框消失以前不会执行之后的代码
+        // Optional<ButtonType> buttonType = alert.showAndWait();
+        // // 根据点击结果返回
+        // if (buttonType.get().getButtonData().equals(ButtonData.YES)) {
+        // item.getParent().getChildren().remove(item);
+        // deleteFileFromTreeItem(item);
+        // }
+        // }
+        // }
+        // }
+        // });
         /**
          * 提交 treetable 中的文件信息到数据库
          */
@@ -475,6 +554,19 @@ public class ImportDocWindow {
                 // + fileRecord.getFileMainType() + ", fileMark:"
                 // + fileRecord.getFileMark());
                 // }
+
+                List<FileImportRecord> recordList = new LinkedList<>();
+                CheckBoxTreeItem<FileImportRecord> root =
+                        (CheckBoxTreeItem<FileImportRecord>) treeTableView.getRoot();
+                ObservableList<TreeItem<FileImportRecord>> children = root.getChildren();
+
+                getFileImportRecodFromTreeItem(recordList, children);
+
+                // for (int i = 0; i < recordList.size(); i++) {
+                // System.out.println(
+                // "========== " + (i + 1) + ": " + recordList.get(i).getFileName());
+                // }
+
                 Result result = FileImportService.getService().importFile(recordList);
                 Alert alert = new Alert(AlertType.WARNING);
                 alert.setTitle("信息");
@@ -485,35 +577,57 @@ public class ImportDocWindow {
         });
     }
 
+    private void getFileImportRecodFromTreeItem(List<FileImportRecord> recordList,
+            ObservableList<TreeItem<FileImportRecord>> children) {
 
-    private TreeTableColumn<FileImportRecord, ?> getTreeColumnFormTreeTableView(
-            ObservableList<TreeTableColumn<FileImportRecord, ?>> list, String colID) {
-        for (int i = 0; i < list.size(); i++) {
-            if (list.get(i).getId().equals(colID)) {
-                return list.get(i);
-            }
-        }
-        return null;
-    }
-
-
-    private void deleteFileFromTreeItem(TreeItem<FileImportRecord> item) {
-        ObservableList<TreeItem<FileImportRecord>> children = item.getChildren();
-        for (int z = 0; z < children.size(); z++) {
-            TreeItem<FileImportRecord> node = children.get(z);
-            if (node.getValue().isFile()) {
-                for (int i = 0; i < recordList.size(); i++) {
-                    System.out.println("===== delete file path:" + node.getValue().getFilePath());
-                    if (recordList.get(i).getFilePath().equals(node.getValue().getFilePath())) {
-                        recordList.remove(i);
-                        break;
-                    }
+        for (int i = 0; i < children.size(); i++) {
+            CheckBoxTreeItem<FileImportRecord> childItem =
+                    (CheckBoxTreeItem<FileImportRecord>) children.get(i);
+            // 如果是全选了 那么 叶子节点，全部保存
+            // if(childItem.isSelected()) {
+            // String fName = childItem.getValue().getFileName();
+            // boolean isLeaf = childItem.isLeaf();
+            // System.out.println("======================= checked "+fName+ ", isLeaf:"+isLeaf);
+            // } else if(childItem.isIndeterminate()) {
+            // // 如果没有全选，但是有部分子节点 勾选了
+            //// 那么 查找勾选的子节点
+            // String fName = childItem.getValue().getFileName();
+            // boolean isLeaf = childItem.isLeaf();
+            // System.out.println("======================= Indeterminate checked "+fName+ ",
+            // isLeaf:"+isLeaf);
+            // }
+            if (childItem.isSelected() || childItem.isIndeterminate()) {
+                // 如果是 叶子节点，那么肯定是选中了
+                if (childItem.isLeaf()) {
+                    recordList.add(childItem.getValue());
+                } else {
+                    // 如果是文件夹，那么需要递归
+                    ObservableList<TreeItem<FileImportRecord>> children2 = childItem.getChildren();
+                    getFileImportRecodFromTreeItem(recordList, children2);
                 }
             } else {
-                deleteFileFromTreeItem(node);
+                continue;
             }
         }
     }
+
+    // private void deleteFileFromTreeItem(TreeItem<FileImportRecord> item) {
+    // ObservableList<TreeItem<FileImportRecord>> children = item.getChildren();
+    // for (int z = 0; z < children.size(); z++) {
+    // TreeItem<FileImportRecord> node = children.get(z);
+    // if (node.getValue().isFile()) {
+    // for (int i = 0; i < recordList.size(); i++) {
+    // System.out.println("===== delete file path:" + node.getValue().getFilePath());
+    // if (recordList.get(i).getFilePath().equals(node.getValue().getFilePath())) {
+    // recordList.remove(i);
+    // break;
+    // }
+    // }
+    // } else {
+    // deleteFileFromTreeItem(node);
+    // }
+    // }
+    // }
 
     /**
      * 根据文件路径，查找当前电脑已连接硬盘的分区 如果 该分区 数据库中没有，那么不能选择文件
@@ -549,7 +663,7 @@ public class ImportDocWindow {
             // 硬盘跳过
             List<Volume> partitons = App.currentVolumes.get(i).getVolumes();
             for (int j = 0; j < partitons.size(); j++) {
-                System.out.println(partitons.get(j).getMountPoint());
+                // System.out.println(partitons.get(j).getMountPoint());
                 if (partitons.get(j).getMountPoint().equals("/")) {
                     return partitons.get(j);
                 }
@@ -588,7 +702,7 @@ public class ImportDocWindow {
 
             if (App.os == PlatformEnum.WINDOWS) {
                 platform = PlatformEnum.WINDOWS.toString();
-//                System.out.println("============ folderPath:" + folderPath);
+                // System.out.println("============ folderPath:" + folderPath);
                 Volume vlm = getVolumeFormCurrentVolumes(folderPath);
                 if (vlm == null || vlm.getHdID() == null) {
                     Alert alert = new Alert(AlertType.WARNING);
@@ -604,12 +718,12 @@ public class ImportDocWindow {
                 hdNickname = vlm.getNickname();
                 ptUUID = vlm.getUuid();
                 mountPoint = vlm.getMountPoint() + "\\";
-//                System.out.println("==== hdID:" + hdID);
-//                System.out.println("======= ptID:" + ptID);
-//                System.out.println("========== hdUniqueCode:" + hdUniqueCode);
-//                System.out.println("============== hdNickname:" + hdNickname);
-//                System.out.println("================= ptUUID:" + ptUUID);
-//                System.out.println("==================== mountPoint:" + mountPoint);
+                // System.out.println("==== hdID:" + hdID);
+                // System.out.println("======= ptID:" + ptID);
+                // System.out.println("========== hdUniqueCode:" + hdUniqueCode);
+                // System.out.println("============== hdNickname:" + hdNickname);
+                // System.out.println("================= ptUUID:" + ptUUID);
+                // System.out.println("==================== mountPoint:" + mountPoint);
             } else {
                 platform = PlatformEnum.MACOS.toString();
                 // 挂载点 类似这样 /Volumes/Others
@@ -656,7 +770,8 @@ public class ImportDocWindow {
             FileImportRecord rootFI = new FileImportRecord(parentFolder);
             rootFI.setHdUniqueCode(hdUniqueCode);
             rootFI.setHdID(hdID);
-            TreeItem<FileImportRecord> itemRoot = new TreeItem<FileImportRecord>(rootFI);
+            CheckBoxTreeItem<FileImportRecord> itemRoot =
+                    new CheckBoxTreeItem<FileImportRecord>(rootFI);
             itemRoot.setExpanded(true);
 
             for (int i = 0; i < files.length; i++) {
@@ -675,12 +790,15 @@ public class ImportDocWindow {
                     fi.setHdNickname(hdNickname);
                     fi.setMountPoint(mountPoint);
                     fi.setPlatform(platform);
-                    recordList.add(fi);
-                    TreeItem<FileImportRecord> item = new TreeItem<FileImportRecord>(fi);
+                    // recordList.add(fi);
+                    CheckBoxTreeItem<FileImportRecord> item =
+                            new CheckBoxTreeItem<FileImportRecord>(fi, new ImageView(fileIcon));
+                    item.setSelected(true);
                     itemRoot.getChildren().add(item);
                 } else {
-                    TreeItem<FileImportRecord> folderItem = loadMoreFiles(recordList, files[i],
+                    CheckBoxTreeItem<FileImportRecord> folderItem = loadMoreFiles(files[i],
                             hdUniqueCode, hdNickname, hdID, ptID, ptUUID, mountPoint, platform);
+                    folderItem.setSelected(true);
                     itemRoot.getChildren().add(folderItem);
                 }
             }
@@ -689,12 +807,13 @@ public class ImportDocWindow {
         }
     }
 
-    private TreeItem<FileImportRecord> loadMoreFiles(List<FileImportRecord> recordList, File folder,
-            String hdUniqueCode, String hdNickname, Long hdID, Long ptID, String ptUUID,
-            String mountPoint, String platform) {
+    private CheckBoxTreeItem<FileImportRecord> loadMoreFiles(File folder, String hdUniqueCode,
+            String hdNickname, Long hdID, Long ptID, String ptUUID, String mountPoint,
+            String platform) {
         FileImportRecord folderRecord = new FileImportRecord(folder);
-        TreeItem<FileImportRecord> parentfolderItem =
-                new TreeItem<FileImportRecord>(folderRecord, new ImageView(folderIcon));
+        CheckBoxTreeItem<FileImportRecord> parentfolderItem =
+                new CheckBoxTreeItem<FileImportRecord>(folderRecord, new ImageView(folderIcon));
+        parentfolderItem.setSelected(true);
         File[] files = folder.listFiles();
         for (int i = 0; i < files.length; i++) {
             if (files[i].isFile()) {
@@ -712,18 +831,19 @@ public class ImportDocWindow {
                 fi.setPtUUID(ptUUID);
                 fi.setMountPoint(mountPoint);
                 fi.setPlatform(platform);
-                recordList.add(fi);
-                TreeItem<FileImportRecord> fileItem = new TreeItem<FileImportRecord>(fi);
+                // recordList.add(fi);
+                CheckBoxTreeItem<FileImportRecord> fileItem =
+                        new CheckBoxTreeItem<FileImportRecord>(fi, new ImageView(fileIcon));
+                fileItem.setSelected(true);
                 parentfolderItem.getChildren().add(fileItem);
             } else {
-                TreeItem<FileImportRecord> folderItem = loadMoreFiles(recordList, files[i],
+                CheckBoxTreeItem<FileImportRecord> folderItem = loadMoreFiles(files[i],
                         hdUniqueCode, hdNickname, hdID, ptID, ptUUID, mountPoint, platform);
                 // folderItem.setGraphic(folderIcon);
+                folderItem.setSelected(true);
                 parentfolderItem.getChildren().add(folderItem);
             }
         }
         return parentfolderItem;
     }
-
-
 }

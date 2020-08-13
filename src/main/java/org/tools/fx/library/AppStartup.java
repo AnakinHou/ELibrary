@@ -1,9 +1,6 @@
 package org.tools.fx.library;
 
-import java.net.URL;
-import javax.swing.ImageIcon;
 import org.tools.fx.library.db.DBHelper;
-import org.tools.fx.library.enums.PlatformEnum;
 import org.tools.fx.library.model.Result;
 import org.tools.fx.library.service.UserService;
 import org.tools.fx.library.tools.Encode;
